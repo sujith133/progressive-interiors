@@ -90,9 +90,6 @@ const NAV_LINKS: { label: string; id: string }[] = [
   { label: 'Home', id: 'hero' },
   { label: 'About', id: 'about' },
   { label: 'Services', id: 'services' },
-  { label: 'Projects', id: 'projects' },
-  { label: 'Process', id: 'process' },
-  { label: 'Testimonials', id: 'testimonials' },
   { label: 'Contact', id: 'contact' },
 ]
 
