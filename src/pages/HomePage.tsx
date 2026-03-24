@@ -5,6 +5,9 @@ import { motion, useInView } from 'framer-motion'
    Reusable animation variants
    ──────────────────────────────────────────── */
 
+// Typed cubic-bezier easing to satisfy framer-motion's Easing type
+const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
+
 // Fade-up pop-out — the primary scroll reveal
 const fadeUpVariant = {
   hidden: { opacity: 0, y: 60, scale: 0.95 },
@@ -12,7 +15,7 @@ const fadeUpVariant = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.7, ease: EASE },
   },
 }
 
@@ -23,7 +26,7 @@ const fadeLeftVariant = {
     opacity: 1,
     x: 0,
     scale: 1,
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.7, ease: EASE },
   },
 }
 
@@ -34,7 +37,7 @@ const fadeRightVariant = {
     opacity: 1,
     x: 0,
     scale: 1,
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.7, ease: EASE },
   },
 }
 
@@ -44,7 +47,7 @@ const scalePopVariant = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.6, ease: EASE },
   },
 }
 
@@ -66,7 +69,7 @@ const staggerChild = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.5, ease: EASE },
   },
 }
 
