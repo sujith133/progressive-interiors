@@ -1,106 +1,27 @@
-import { useState, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-
-/* ────────────────────────────────────────────
-   Reusable animation variants
-   ──────────────────────────────────────────── */
-
-// Typed cubic-bezier easing to satisfy framer-motion's Easing type
-const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
-
-// Fade-up pop-out — the primary scroll reveal
-const fadeUpVariant = {
-  hidden: { opacity: 0, y: 60, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.7, ease: EASE },
-  },
-}
-
-// Fade from left
-const fadeLeftVariant = {
-  hidden: { opacity: 0, x: -80, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    scale: 1,
-    transition: { duration: 0.7, ease: EASE },
-  },
-}
-
-// Fade from right
-const fadeRightVariant = {
-  hidden: { opacity: 0, x: 80, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    scale: 1,
-    transition: { duration: 0.7, ease: EASE },
-  },
-}
-
-// Scale pop
-const scalePopVariant = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, ease: EASE },
-  },
-}
-
-// Staggered container
-const staggerContainer = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-    },
-  },
-}
-
-// Staggered child
-const staggerChild = {
-  hidden: { opacity: 0, y: 40, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: EASE },
-  },
-}
-
-/* ────────────────────────────────────────────
-   Helper hook: section-level in-view trigger
-   ──────────────────────────────────────────── */
-function useSectionInView(amount = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, amount })
-  return { ref, inView }
-}
+import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+import PageLayout from '../components/PageLayout'
+import {
+  fadeUpVariant,
+  fadeLeftVariant,
+  fadeRightVariant,
+  scalePopVariant,
+  staggerContainer,
+  staggerChild,
+  useSectionInView,
+} from '../utils/animations'
+import heroLivingRoom from '../assets/images/hero-living-room.webp'
+import serviceResidentialDesign from '../assets/images/service-residential-design.webp'
+import serviceSpacePlanning from '../assets/images/service-space-planning.webp'
+import serviceMaterialCuration from '../assets/images/service-material-curation.webp'
+import brandStudioWorkspace from '../assets/images/brand-studio-workspace.webp'
+import projectOakStoneVilla from '../assets/images/project-oak-stone-villa.webp'
+import projectMinimalistPenthouse from '../assets/images/project-minimalist-penthouse.webp'
 
 /* ════════════════════════════════════════════
    HomePage Component
    ════════════════════════════════════════════ */
-// Nav link → section id mapping
-const NAV_LINKS: { label: string; id: string }[] = [
-  { label: 'Home', id: 'hero' },
-  { label: 'About', id: 'about' },
-  { label: 'Services', id: 'services' },
-  { label: 'Contact', id: 'contact' },
-]
-
-const scrollToSection = (id: string) => {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth' })
-}
-
 const HomePage = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   // Section refs
   const hero = useSectionInView(0.15)
   const stats = useSectionInView(0.3)
@@ -110,103 +31,11 @@ const HomePage = () => {
   const process = useSectionInView(0.15)
   const testimonials = useSectionInView(0.15)
   const cta = useSectionInView(0.25)
-  const footer = useSectionInView(0.1)
 
   return (
-    <>
-      {/* ===== STICKY HEADER ===== */}
-      <motion.header
-        className="sticky top-0 z-50 bg-warm-cream/90 backdrop-blur-md border-b border-forest-green/5"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-      >
-        <nav className="container mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
-          {/* Logo */}
-          <motion.a
-            className="font-serif text-3xl font-medium tracking-tighter"
-            href="/"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            PI
-          </motion.a>
-
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center space-x-10 text-sm tracking-wide font-medium uppercase">
-            {NAV_LINKS.map(
-              (link, i) => (
-                <motion.a
-                  key={link.label}
-                  className="nav-link cursor-pointer"
-                  onClick={() => scrollToSection(link.id)}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.08, duration: 0.4 }}
-                  whileHover={{ y: -2 }}
-                >
-                  {link.label}
-                </motion.a>
-              )
-            )}
-          </div>
-
-          {/* CTA + Hamburger */}
-          <div className="flex items-center space-x-4 lg:space-x-0">
-            <motion.a
-              className="bg-forest-green text-warm-cream px-6 py-2.5 lg:px-8 lg:py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer"
-              onClick={() => scrollToSection('contact')}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Book Consultation
-            </motion.a>
-            {/* Hamburger — visible on tablet/mobile only */}
-            <button
-              className="lg:hidden p-2 -mr-2"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              <span className="material-symbols-outlined text-forest-green text-3xl">
-                {mobileMenuOpen ? 'close' : 'menu'}
-              </span>
-            </button>
-          </div>
-        </nav>
-
-        {/* Mobile / Tablet slide-down menu */}
-        {mobileMenuOpen && (
-          <motion.div
-            className="lg:hidden bg-warm-cream border-t border-forest-green/5 px-6 py-6 space-y-4 text-sm tracking-wide font-medium uppercase"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-          >
-            {NAV_LINKS.map(
-              (link, i) => (
-                <motion.a
-                  key={link.label}
-                  className="block py-2 nav-link cursor-pointer"
-                  onClick={() => { scrollToSection(link.id); setMobileMenuOpen(false); }}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.3 }}
-                >
-                  {link.label}
-                </motion.a>
-              )
-            )}
-          </motion.div>
-        )}
-      </motion.header>
-
-      <main>
+    <PageLayout>
         {/* ===== HERO SECTION ===== */}
         <section
-          id="hero"
           className="pt-16 lg:pt-20 pb-section lg:pb-desktop-section px-6 lg:px-12 relative overflow-hidden"
           data-purpose="hero"
           ref={hero.ref}
@@ -223,14 +52,17 @@ const HomePage = () => {
                 <h1 className="font-serif text-8xl leading-[1.1] mb-8">
                   Designing Spaces That Reflect You
                 </h1>
-                <motion.a
-                  className="ghost-button inline-block px-10 py-4 text-sm uppercase tracking-widest font-medium"
-                  href="#"
+                <motion.div
                   whileHover={{ scale: 1.05, x: 5 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  View Our Portfolio
-                </motion.a>
+                  <Link
+                    className="ghost-button inline-block px-10 py-4 text-sm uppercase tracking-widest font-medium"
+                    to="/projects"
+                  >
+                    View Our Portfolio
+                  </Link>
+                </motion.div>
               </motion.div>
             </div>
 
@@ -245,7 +77,7 @@ const HomePage = () => {
               <img
                 alt="Luxury Living Room"
                 className="w-full h-full object-cover shadow-2xl"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz_a9Gh5C6UV8k2PNqbQ4ri6KtTf4c1ge7W7yg315l4VjEN78AHvaW5t1G4X1KQe4-UmVfanqRwVVSyT1XtMrPnjOH3mMB9r2KHW6ifHADI2BLdYYjq56X5dCDBe7s3GUqDPcKX7XSaWjnqQBtX7fobFfwVgzVHB3OhXo0Lh7JlRu_hezIXVYlQk1re8bSmrqNvTsPMARM7MuX_krt_tVieUIgZi4KTFTTYJUxAF4qpB6G4AGoovjm6LGCQy6abTTF3E6aIL8-o_PY"
+                src={heroLivingRoom}
               />
             </motion.div>
 
@@ -289,7 +121,7 @@ const HomePage = () => {
                 <img
                   alt="Luxury Living Room"
                   className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz_a9Gh5C6UV8k2PNqbQ4ri6KtTf4c1ge7W7yg315l4VjEN78AHvaW5t1G4X1KQe4-UmVfanqRwVVSyT1XtMrPnjOH3mMB9r2KHW6ifHADI2BLdYYjq56X5dCDBe7s3GUqDPcKX7XSaWjnqQBtX7fobFfwVgzVHB3OhXo0Lh7JlRu_hezIXVYlQk1re8bSmrqNvTsPMARM7MuX_krt_tVieUIgZi4KTFTTYJUxAF4qpB6G4AGoovjm6LGCQy6abTTF3E6aIL8-o_PY"
+                  src={heroLivingRoom}
                 />
               </motion.div>
             </div>
@@ -298,7 +130,6 @@ const HomePage = () => {
 
         {/* ===== STATS STRIP ===== */}
         <section
-          id="stats"
           className="py-10 lg:py-12 bg-warm-cream border-y border-forest-green/10"
           data-purpose="stats"
           ref={stats.ref}
@@ -341,7 +172,6 @@ const HomePage = () => {
 
         {/* ===== OUR SERVICES ===== */}
         <section
-          id="services"
           className="py-section lg:py-desktop-section px-6 lg:px-12"
           data-purpose="services-grid"
           ref={services.ref}
@@ -390,7 +220,7 @@ const HomePage = () => {
                   <img
                     alt="Service 1"
                     className="w-full h-full object-cover rounded-lg lg:rounded-none"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw1nfGqRKdfk7JzBY1H2fd2RjyBl4gKjgdCNeQU9LAn7OcbsM4Tr4Mc0pyhVQ1zj851izm7ar00EUyXXnrrvBrTbZ-XoTOHUj5TwQP4wJCLyy3nqjyku_Xzl8LoUOWxC6ktXkUQWwBD4so6NURMhjLhyTCMPh_Rk1Tep9l9hHPkP5NNLiPGEwGWEuoykdfPvTHbdeFK13GsVz7I2OnyoRWYh_12lOwsiTFFL63fyCLXT-GurWaIzJ62vFS3QWU1IXtW4tGKx_-SJhu"
+                    src={serviceResidentialDesign}
                   />
                 </motion.div>
                 <div className="col-span-1 lg:col-span-5 grid grid-rows-2 gap-4 h-full">
@@ -403,7 +233,7 @@ const HomePage = () => {
                     <img
                       alt="Service 2"
                       className="w-full h-full object-cover rounded-lg lg:rounded-none"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuC69oaUJmK2Zbp3qTJ5sO56fknt-Fq4IBR0TNcUcFKz6-ZSQZchCgqjm_F2qSZKjaqMI6XCHN-RshkkTHVSxfxgFcYcfzIQgtiReRzINzWXPwQrm209TqCrGtn_tQ2MiBwggH9wMmmljjIjjwKLbE1OIEL6W5X3MtozvdyWzS0D90oINCbWfnRLRfeYNgHgdSliZy81QOWiCm6992Vjmb8uNOChvOLKhpSQEAPB6RVPhC7Tx-xoRxSCrI8_e9y-7aKd8SNNphZ0mnGQ"
+                      src={serviceSpacePlanning}
                     />
                   </motion.div>
                   <motion.div
@@ -415,7 +245,7 @@ const HomePage = () => {
                     <img
                       alt="Service 3"
                       className="w-full h-full object-cover rounded-lg lg:rounded-none"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoyXPPdjvC-r0GkYGNewwkVtpTczqj3WgdiF-69bAoNjVAq36tzijCq5VDliSyUC7Tlr3vnj1TAFyQraW246acGTpCJyq3OHyUAVIeXtfPPXX53vrHRo7ZtNCbkm_qWDeaVqtmaTdPJoyvM6r4zJpkwhf1ErSKECj7cPSzc4qXU1U9fx0zltp5CusQBo5Wo2pU7ans0peiW63WMVXzbLzoet6Q4PpFHA811oe3mJ0RKdPxs-Zaw3CqViYFvc-69HwORbanonbWsDoi"
+                      src={serviceMaterialCuration}
                     />
                   </motion.div>
                 </div>
@@ -426,7 +256,6 @@ const HomePage = () => {
 
         {/* ===== BRAND STORY ===== */}
         <section
-          id="about"
           className="py-section lg:py-desktop-section bg-forest-green text-warm-cream"
           data-purpose="brand-story"
           ref={brand.ref}
@@ -443,7 +272,7 @@ const HomePage = () => {
                 <motion.img
                   alt="Studio Space"
                   className="w-full h-full object-cover grayscale brightness-75 rounded-lg lg:rounded-none"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuX2kKjjkBdnohoIcDxf1RQyatS8dxYWwIVagi280NJf-LY9e8dkWJHrlTnuSKgJC1phPZxuEcivbH2JmvIyQ1L1JgRHgEiOnUFIuZMipxwxAu8twTVampwf9RGH0KXDfi69Wqfa2Uh95hJIYjO89zuN_wXQ4pvUgBj8Oh3BfylnoO3fHDEZbKW2_zR9PRi30J9JQiYMMFFv6qrNT16MGempXy8oA0dZNcgGBp4V3OzNgG6NdA1JjLffmsV0zci9eagqAcXk08sUNL"
+                  src={brandStudioWorkspace}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.6 }}
                 />
@@ -489,7 +318,6 @@ const HomePage = () => {
 
         {/* ===== PORTFOLIO ===== */}
         <section
-          id="projects"
           className="py-section lg:py-desktop-section px-6 lg:px-12"
           data-purpose="portfolio-preview"
           ref={portfolio.ref}
@@ -502,13 +330,14 @@ const HomePage = () => {
               animate={portfolio.inView ? 'visible' : 'hidden'}
             >
               <h2 className="font-serif text-4xl md:text-5xl">Featured Projects</h2>
-              <motion.a
-                className="nav-link text-xs lg:text-sm uppercase tracking-widest"
-                href="#"
-                whileHover={{ x: 5 }}
-              >
-                View All<span className="hidden sm:inline"> Projects</span>
-              </motion.a>
+              <motion.div whileHover={{ x: 5 }}>
+                <Link
+                  className="nav-link text-xs lg:text-sm uppercase tracking-widest"
+                  to="/projects"
+                >
+                  View All<span className="hidden sm:inline"> Projects</span>
+                </Link>
+              </motion.div>
             </motion.div>
 
             <motion.div
@@ -519,15 +348,16 @@ const HomePage = () => {
             >
               {/* Project Card 1 */}
               <motion.div className="group cursor-pointer" variants={staggerChild}>
+               <Link to="/projects/ananda-villa">
                 <motion.div
                   className="overflow-hidden aspect-video sm:aspect-video lg:aspect-[4/3] mb-4 lg:mb-6 rounded-lg lg:rounded-none"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
                   <img
-                    alt="Oak & Stone Villa"
+                    alt="Ananda Villa"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR2gxmfnVPSgALiiBrVSvXptoAc_xv9rx4zL4mgg0Y1YuU587n_VYoXqZ45yYPP71eeojuLs5mRqWzNnb6AYPPBiHfRZfiPAhQJryyIpCXGpDUeItYBT6ioYg6C0p6Rs8vE4rcyqizonIS6uIA19s3ITj2cyQYeZKwza-xqgqT9AuJtSSIyXCq12FXWTTl8Tj48SjkUFXDxa5zhq3_HwIgpdl1ivelgqlxtlpbH5Ln0YpJ7xDqB-HXwNObEDc6lpIy97rlJJdxHcs4"
+                    src={projectOakStoneVilla}
                   />
                 </motion.div>
                 <motion.h3
@@ -536,7 +366,7 @@ const HomePage = () => {
                   animate={portfolio.inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.4 }}
                 >
-                  Oak &amp; Stone Villa
+                  Ananda Villa
                 </motion.h3>
                 <motion.p
                   className="text-[10px] lg:text-sm uppercase tracking-widest opacity-60"
@@ -544,21 +374,23 @@ const HomePage = () => {
                   animate={portfolio.inView ? { opacity: 0.6, y: 0 } : {}}
                   transition={{ delay: 0.5 }}
                 >
-                  Full Renovation, 2023
+                  Residential · Bangalore
                 </motion.p>
+               </Link>
               </motion.div>
 
               {/* Project Card 2 */}
               <motion.div className="group cursor-pointer" variants={staggerChild}>
+               <Link to="/projects/kala-loft">
                 <motion.div
                   className="overflow-hidden aspect-video sm:aspect-video lg:aspect-[4/3] mb-4 lg:mb-6 rounded-lg lg:rounded-none"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
                   <img
-                    alt="Minimalist Penthouse"
+                    alt="Kala Loft"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEIO20h-Eo5OZU95Qk3_21jV9XzNu99OvBt2xQ5LHq_B_viJ_673IrqZ2qPi3h3HWkEyaoiNCLAPl6weVQJ-NJTQiTRrfJci6sdEAr6C805wRYEBqFgpHjWHfjspfY8AxrFFcNqo9gYUDRgb8SJcYBQ4WWh-v4wviPaqi1GSYBUINob7e3cX2xSq3d-6yLeKBMSeRSUKHKuFUfehYIdtJqgzQXzLj23YFoqSVZflk3-F7Q25k2sSmdJymjJhhW9c1fSlILHt7qkG5V"
+                    src={projectMinimalistPenthouse}
                   />
                 </motion.div>
                 <motion.h3
@@ -567,7 +399,7 @@ const HomePage = () => {
                   animate={portfolio.inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.5 }}
                 >
-                  Minimalist Penthouse
+                  Kala Loft
                 </motion.h3>
                 <motion.p
                   className="text-[10px] lg:text-sm uppercase tracking-widest opacity-60"
@@ -575,8 +407,9 @@ const HomePage = () => {
                   animate={portfolio.inView ? { opacity: 0.6, y: 0 } : {}}
                   transition={{ delay: 0.6 }}
                 >
-                  Interior Styling, 2024
+                  Residential · Mumbai
                 </motion.p>
+               </Link>
               </motion.div>
             </motion.div>
           </div>
@@ -584,7 +417,6 @@ const HomePage = () => {
 
         {/* ===== PROCESS ===== */}
         <section
-          id="process"
           className="py-section lg:py-desktop-section bg-warm-cream"
           data-purpose="design-process"
           ref={process.ref}
@@ -641,7 +473,6 @@ const HomePage = () => {
 
         {/* ===== TESTIMONIALS ===== */}
         <section
-          id="testimonials"
           className="py-section lg:py-desktop-section px-6 lg:px-12 overflow-hidden"
           data-purpose="testimonials"
           ref={testimonials.ref}
@@ -754,112 +585,7 @@ const HomePage = () => {
             </motion.div>
           </div>
         </section>
-      </main>
-
-      {/* ===== FOOTER ===== */}
-      <footer
-        id="contact"
-        className="bg-warm-cream border-t border-forest-green/10 pt-16 lg:pt-24 pb-10 lg:pb-12 px-6 lg:px-12"
-        data-purpose="main-footer"
-        ref={footer.ref}
-      >
-        <div className="container mx-auto">
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-12 lg:gap-y-0 mb-16 lg:mb-20"
-            variants={staggerContainer}
-            initial="hidden"
-            animate={footer.inView ? 'visible' : 'hidden'}
-          >
-            {/* Brand */}
-            <motion.div variants={staggerChild}>
-              <motion.a
-                className="font-serif text-3xl lg:text-4xl font-medium tracking-tighter mb-6 lg:mb-8 block"
-                href="/"
-                whileHover={{ scale: 1.05 }}
-              >
-                PI
-              </motion.a>
-              <p className="opacity-60 text-xs lg:text-sm leading-relaxed max-w-xs">
-                Refining the art of living through sustainable, minimalist design. Based in New
-                York, serving clients worldwide.
-              </p>
-            </motion.div>
-
-            {/* Links */}
-            <motion.div variants={staggerChild}>
-              <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8">
-                Navigation
-              </h5>
-              <ul className="space-y-3 lg:space-y-4 text-xs lg:text-sm opacity-80">
-                {['Portfolio', 'Our Process', 'Interior Styling', 'Architectural Design'].map(
-                  (item) => (
-                    <li key={item}>
-                      <motion.a
-                        className="hover:opacity-100 transition-opacity"
-                        href="#"
-                        whileHover={{ x: 4 }}
-                      >
-                        {item}
-                      </motion.a>
-                    </li>
-                  )
-                )}
-              </ul>
-            </motion.div>
-
-            {/* Contact */}
-            <motion.div variants={staggerChild}>
-              <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8">
-                Contact
-              </h5>
-              <ul className="space-y-3 lg:space-y-4 text-xs lg:text-sm opacity-80">
-                <li>hello@progressiveinteriors.com</li>
-                <li>+1 (555) 123-4567</li>
-                <li>Studio 42, Madison Ave, NYC</li>
-              </ul>
-            </motion.div>
-
-            {/* Newsletter */}
-            <motion.div variants={staggerChild}>
-              <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8">
-                Journal
-              </h5>
-              <p className="text-xs lg:text-sm opacity-60 mb-5 lg:mb-6">
-                Receive curated design inspiration monthly.
-              </p>
-              <form className="flex border-b border-forest-green/20 pb-2">
-                <input
-                  className="bg-transparent border-none focus:ring-0 text-xs lg:text-sm w-full p-0 placeholder:text-forest-green/40"
-                  placeholder="Email Address"
-                  type="email"
-                />
-                <motion.button
-                  className="text-[10px] lg:text-xs uppercase font-bold"
-                  type="submit"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  Join
-                </motion.button>
-              </form>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="flex flex-col sm:flex-row justify-between items-center pt-10 lg:pt-12 border-t border-forest-green/5 opacity-40 text-[9px] lg:text-[10px] uppercase tracking-[0.2em]"
-            variants={fadeUpVariant}
-            initial="hidden"
-            animate={footer.inView ? 'visible' : 'hidden'}
-          >
-            <p>© 2024 Progressive Interiors. All rights reserved.</p>
-            <div className="flex space-x-6 lg:space-x-8 mt-4 sm:mt-0">
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
-            </div>
-          </motion.div>
-        </div>
-      </footer>
-    </>
+    </PageLayout>
   )
 }
 
