@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .hero-gradient {
+    background: linear-gradient(to bottom, transparent, #F7F6F2);
+  }
+}
+
+@layer components {
+  .ghost-button {
+    @apply border border-forest-green transition-all duration-300 ease-in-out;
+  }
+  .ghost-button:hover {
+    @apply bg-forest-green text-warm-cream;
+  }
+  .nav-link {
+    @apply relative;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute w-0 h-[1px] -bottom-[2px] left-0 bg-forest-green transition-all duration-300 ease-in-out;
+  }
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+}
+
+/* Testimonial horizontal scroll for tablet */
+.testimonial-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.testimonial-container::-webkit-scrollbar {
+  display: none;
+}
+.testimonial-card {
+  min-width: 80%;
+  scroll-snap-align: start;
+}
+@media (min-width: 640px) {
+  .testimonial-card {
+    min-width: 45%;
+  }
+}
+@media (min-width: 1024px) {
+  .testimonial-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow-x: visible;
+  }
+  .testimonial-card {
+    min-width: unset;
+  }
+}

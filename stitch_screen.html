@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Progressive Interiors | Luxury Interior Design</title>
+<!-- Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&amp;family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'warm-cream': '#F7F6F2',
+            'soft-sage': '#C1D3B8',
+            'forest-green': '#234E3E',
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          spacing: {
+            'section': '120px',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-styling">
+    body {
+      background-color: #F7F6F2;
+      color: #234E3E;
+      scroll-behavior: smooth;
+    }
+    .hero-gradient {
+      background: linear-gradient(to bottom, transparent, #F7F6F2);
+    }
+    .ghost-button {
+      border: 1px solid #234E3E;
+      transition: all 0.3s ease;
+    }
+    .ghost-button:hover {
+      background-color: #234E3E;
+      color: #F7F6F2;
+    }
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 0;
+      background-color: #234E3E;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+<!-- BEGIN: Sticky Header -->
+<header class="sticky top-0 z-50 bg-warm-cream/90 backdrop-blur-md border-b border-forest-green/5">
+<nav class="container mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+<!-- Logo -->
+<a class="font-serif text-3xl font-medium tracking-tighter" data-purpose="brand-logo" href="/">PI</a>
+<!-- Navigation Links -->
+<div class="hidden lg:flex items-center space-x-10 text-sm tracking-wide font-medium uppercase">
+<a class="nav-link" href="#">Home</a>
+<a class="nav-link" href="#">About</a>
+<a class="nav-link" href="#">Services</a>
+<a class="nav-link" href="#">Projects</a>
+<a class="nav-link" href="#">Process</a>
+<a class="nav-link" href="#">Blog</a>
+<a class="nav-link" href="#">Contact</a>
+</div>
+<!-- CTA -->
+<a class="bg-forest-green text-warm-cream px-8 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity" data-purpose="header-cta" href="#">
+        Book Consultation
+      </a>
+</nav>
+</header>
+<!-- END: Sticky Header -->
+<main>
+<!-- BEGIN: Hero Section -->
+<section class="pt-20 pb-section px-6 lg:px-12 relative overflow-hidden" data-purpose="hero">
+<div class="container mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+<div class="lg:col-span-5 mb-12 lg:mb-0">
+<h1 class="font-serif text-6xl lg:text-8xl leading-[1.1] mb-8">
+              Designing Spaces That Reflect You
+            </h1>
+</div>
+<div class="lg:col-span-3 lg:col-start-9 pb-8">
+<p class="text-lg leading-relaxed mb-8 opacity-80">
+              Bespoke interiors crafted with a focus on tranquility, functionality, and timeless elegance.
+            </p>
+<a class="ghost-button inline-block px-10 py-4 text-sm uppercase tracking-widest font-medium" href="#">
+              View Our Portfolio
+            </a>
+</div>
+</div>
+<!-- Hero Image centered-right with slight overlap -->
+<div class="mt-16 lg:mt-0 relative lg:absolute lg:top-24 lg:right-0 w-full lg:w-7/12 h-[500px] lg:h-[700px] -z-10">
+<img alt="Luxury Living Room" class="w-full h-full object-cover shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz_a9Gh5C6UV8k2PNqbQ4ri6KtTf4c1ge7W7yg315l4VjEN78AHvaW5t1G4X1KQe4-UmVfanqRwVVSyT1XtMrPnjOH3mMB9r2KHW6ifHADI2BLdYYjq56X5dCDBe7s3GUqDPcKX7XSaWjnqQBtX7fobFfwVgzVHB3OhXo0Lh7JlRu_hezIXVYlQk1re8bSmrqNvTsPMARM7MuX_krt_tVieUIgZi4KTFTTYJUxAF4qpB6G4AGoovjm6LGCQy6abTTF3E6aIL8-o_PY"/>
+</div>
+</div>
+</section>
+<!-- END: Hero Section -->
+<!-- BEGIN: Stats Strip -->
+<section class="py-12 bg-warm-cream border-y border-forest-green/10" data-purpose="stats">
+<div class="container mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="text-center border-r border-forest-green/10 last:border-r-0">
+<span class="block font-serif text-5xl mb-2">15</span>
+<span class="text-xs uppercase tracking-widest opacity-60">Years of Experience</span>
+</div>
+<div class="text-center border-r border-forest-green/10 last:border-r-0">
+<span class="block font-serif text-5xl mb-2">450+</span>
+<span class="text-xs uppercase tracking-widest opacity-60">Projects Completed</span>
+</div>
+<div class="text-center border-r border-forest-green/10 last:border-r-0">
+<span class="block font-serif text-5xl mb-2">99%</span>
+<span class="text-xs uppercase tracking-widest opacity-60">Client Satisfaction</span>
+</div>
+<div class="text-center">
+<span class="block font-serif text-5xl mb-2">12</span>
+<span class="text-xs uppercase tracking-widest opacity-60">Team Members</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Stats Strip -->
+<!-- BEGIN: Our Service -->
+<section class="py-section px-6 lg:px-12" data-purpose="services-grid">
+<div class="container mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div class="max-w-md">
+<span class="text-soft-sage font-medium tracking-widest uppercase text-sm mb-4 block">Our Services</span>
+<h2 class="font-serif text-5xl mb-8 leading-tight">Elevating Residential Living</h2>
+<p class="text-lg opacity-80 mb-10 leading-relaxed">
+              From conceptual design to final curation, we manage every detail to ensure your home is a masterpiece of comfort and style.
+            </p>
+<a class="bg-forest-green text-warm-cream px-12 py-5 rounded-full inline-block font-medium hover:opacity-90 transition-opacity" href="#">
+              Get Started
+            </a>
+</div>
+<!-- Asymmetric Image Grid -->
+<div class="grid grid-cols-12 gap-4 h-[600px]" data-purpose="asymmetric-images">
+<div class="col-span-7 h-full">
+<img alt="Service 1" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw1nfGqRKdfk7JzBY1H2fd2RjyBl4gKjgdCNeQU9LAn7OcbsM4Tr4Mc0pyhVQ1zj851izm7ar00EUyXXnrrvBrTbZ-XoTOHUj5TwQP4wJCLyy3nqjyku_Xzl8LoUOWxC6ktXkUQWwBD4so6NURMhjLhyTCMPh_Rk1Tep9l9hHPkP5NNLiPGEwGWEuoykdfPvTHbdeFK13GsVz7I2OnyoRWYh_12lOwsiTFFL63fyCLXT-GurWaIzJ62vFS3QWU1IXtW4tGKx_-SJhu"/>
+</div>
+<div class="col-span-5 grid grid-rows-2 gap-4 h-full">
+<img alt="Service 2" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC69oaUJmK2Zbp3qTJ5sO56fknt-Fq4IBR0TNcUcFKz6-ZSQZchCgqjm_F2qSZKjaqMI6XCHN-RshkkTHVSxfxgFcYcfzIQgtiReRzINzWXPwQrm209TqCrGtn_tQ2MiBwggH9wMmmljjIjjwKLbE1OIEL6W5X3MtozvdyWzS0D90oINCbWfnRLRfeYNgHgdSliZy81QOWiCm6992Vjmb8uNOChvOLKhpSQEAPB6RVPhC7Tx-xoRxSCrI8_e9y-7aKd8SNNphZ0mnGQ"/>
+<img alt="Service 3" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoyXPPdjvC-r0GkYGNewwkVtpTczqj3WgdiF-69bAoNjVAq36tzijCq5VDliSyUC7Tlr3vnj1TAFyQraW246acGTpCJyq3OHyUAVIeXtfPPXX53vrHRo7ZtNCbkm_qWDeaVqtmaTdPJoyvM6r4zJpkwhf1ErSKECj7cPSzc4qXU1U9fx0zltp5CusQBo5Wo2pU7ans0peiW63WMVXzbLzoet6Q4PpFHA811oe3mJ0RKdPxs-Zaw3CqViYFvc-69HwORbanonbWsDoi"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Our Service -->
+<!-- BEGIN: Brand Story -->
+<section class="py-section bg-forest-green text-warm-cream" data-purpose="brand-story">
+<div class="container mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="order-2 lg:order-1 h-[600px]">
+<img alt="Studio Space" class="w-full h-full object-cover grayscale brightness-75" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuX2kKjjkBdnohoIcDxf1RQyatS8dxYWwIVagi280NJf-LY9e8dkWJHrlTnuSKgJC1phPZxuEcivbH2JmvIyQ1L1JgRHgEiOnUFIuZMipxwxAu8twTVampwf9RGH0KXDfi69Wqfa2Uh95hJIYjO89zuN_wXQ4pvUgBj8Oh3BfylnoO3fHDEZbKW2_zR9PRi30J9JQiYMMFFv6qrNT16MGempXy8oA0dZNcgGBp4V3OzNgG6NdA1JjLffmsV0zci9eagqAcXk08sUNL"/>
+</div>
+<div class="order-1 lg:order-2 px-4">
+<span class="text-soft-sage font-medium tracking-widest uppercase text-sm mb-4 block">Who We Are</span>
+<h2 class="font-serif text-5xl mb-8 leading-tight">A Modern Philosophy for Classic Living</h2>
+<p class="text-lg leading-relaxed mb-6 opacity-90">
+              Founded on the principles of minimalism and warmth, Progressive Interiors believes that your surroundings deeply impact your well-being.
+            </p>
+<p class="text-lg leading-relaxed opacity-90">
+              We curate high-end finishes and sustainable materials to create environments that feel natural, lived-in, and exceptionally luxurious.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Brand Story -->
+<!-- BEGIN: Portfolio -->
+<section class="py-section px-6 lg:px-12" data-purpose="portfolio-preview">
+<div class="container mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16">
+<h2 class="font-serif text-5xl">Featured Projects</h2>
+<a class="nav-link text-sm uppercase tracking-widest mt-4 md:mt-0" href="#">View All Projects</a>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+<!-- Project Card 1 -->
+<div class="group cursor-pointer">
+<div class="overflow-hidden aspect-[4/3] mb-6">
+<img alt="Project 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR2gxmfnVPSgALiiBrVSvXptoAc_xv9rx4zL4mgg0Y1YuU587n_VYoXqZ45yYPP71eeojuLs5mRqWzNnb6AYPPBiHfRZfiPAhQJryyIpCXGpDUeItYBT6ioYg6C0p6Rs8vE4rcyqizonIS6uIA19s3ITj2cyQYeZKwza-xqgqT9AuJtSSIyXCq12FXWTTl8Tj48SjkUFXDxa5zhq3_HwIgpdl1ivelgqlxtlpbH5Ln0YpJ7xDqB-HXwNObEDc6lpIy97rlJJdxHcs4"/>
+</div>
+<h3 class="font-serif text-3xl mb-1">Oak &amp; Stone Villa</h3>
+<p class="text-sm uppercase tracking-widest opacity-60">Full Renovation, 2023</p>
+</div>
+<!-- Project Card 2 -->
+<div class="group cursor-pointer">
+<div class="overflow-hidden aspect-[4/3] mb-6">
+<img alt="Project 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEIO20h-Eo5OZU95Qk3_21jV9XzNu99OvBt2xQ5LHq_B_viJ_673IrqZ2qPi3h3HWkEyaoiNCLAPl6weVQJ-NJTQiTRrfJci6sdEAr6C805wRYEBqFgpHjWHfjspfY8AxrFFcNqo9gYUDRgb8SJcYBQ4WWh-v4wviPaqi1GSYBUINob7e3cX2xSq3d-6yLeKBMSeRSUKHKuFUfehYIdtJqgzQXzLj23YFoqSVZflk3-F7Q25k2sSmdJymjJhhW9c1fSlILHt7qkG5V"/>
+</div>
+<h3 class="font-serif text-3xl mb-1">Minimalist Penthouse</h3>
+<p class="text-sm uppercase tracking-widest opacity-60">Interior Styling, 2024</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Portfolio -->
+<!-- BEGIN: Process -->
+<section class="py-section bg-warm-cream" data-purpose="design-process">
+<div class="container mx-auto px-6 lg:px-12">
+<h2 class="font-serif text-5xl text-center mb-24">The PI Way</h2>
+<div class="relative grid grid-cols-1 md:grid-cols-4 gap-12">
+<!-- Connector Line (Desktop Only) -->
+<div class="hidden md:block absolute top-12 left-0 w-full h-px border-t border-dashed border-forest-green/20 -z-0"></div>
+<!-- Step 1 -->
+<div class="relative z-10 text-center bg-warm-cream px-4">
+<div class="w-24 h-24 mx-auto bg-soft-sage/30 rounded-full flex items-center justify-center font-serif text-3xl mb-8">01</div>
+<h4 class="font-serif text-2xl mb-4">Inquiry</h4>
+<p class="text-sm opacity-70 leading-relaxed">Understanding your vision and the spatial possibilities.</p>
+</div>
+<!-- Step 2 -->
+<div class="relative z-10 text-center bg-warm-cream px-4">
+<div class="w-24 h-24 mx-auto bg-soft-sage/30 rounded-full flex items-center justify-center font-serif text-3xl mb-8">02</div>
+<h4 class="font-serif text-2xl mb-4">Concept</h4>
+<p class="text-sm opacity-70 leading-relaxed">Moodboards, material selection, and structural layouts.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative z-10 text-center bg-warm-cream px-4">
+<div class="w-24 h-24 mx-auto bg-soft-sage/30 rounded-full flex items-center justify-center font-serif text-3xl mb-8">03</div>
+<h4 class="font-serif text-2xl mb-4">Design</h4>
+<p class="text-sm opacity-70 leading-relaxed">3D Visualizations and technical drawings for production.</p>
+</div>
+<!-- Step 4 -->
+<div class="relative z-10 text-center bg-warm-cream px-4">
+<div class="w-24 h-24 mx-auto bg-soft-sage/30 rounded-full flex items-center justify-center font-serif text-3xl mb-8">04</div>
+<h4 class="font-serif text-2xl mb-4">Reveal</h4>
+<p class="text-sm opacity-70 leading-relaxed">Final styling and the keys to your new sanctuary.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Process -->
+<!-- BEGIN: Testimonials -->
+<section class="py-section px-6 lg:px-12" data-purpose="testimonials">
+<div class="container mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="bg-white p-12 shadow-sm border border-forest-green/5">
+<div class="text-yellow-500 mb-6">★★★★★</div>
+<p class="text-lg italic mb-10 leading-relaxed opacity-80">"The level of detail and the serene atmosphere they created in our beach house is simply unmatched."</p>
+<div>
+<p class="font-medium">Elena Richardson</p>
+<p class="text-xs uppercase tracking-widest opacity-50">Malibu Residency</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-12 shadow-sm border border-forest-green/5">
+<div class="text-yellow-500 mb-6">★★★★★</div>
+<p class="text-lg italic mb-10 leading-relaxed opacity-80">"Working with PI was a dream. They understood my need for minimalism without losing the cozy soul of a home."</p>
+<div>
+<p class="font-medium">Marcus Chen</p>
+<p class="text-xs uppercase tracking-widest opacity-50">Skyline Apartment</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white p-12 shadow-sm border border-forest-green/5">
+<div class="text-yellow-500 mb-6">★★★★★</div>
+<p class="text-lg italic mb-10 leading-relaxed opacity-80">"Professional, intuitive, and highly talented. Our office feels like a wellness retreat now."</p>
+<div>
+<p class="font-medium">Sarah Jenkins</p>
+<p class="text-xs uppercase tracking-widest opacity-50">Bloom HQ</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Testimonials -->
+<!-- BEGIN: Pre-Footer -->
+<section class="pb-section px-6 lg:px-12" data-purpose="cta-banner">
+<div class="container mx-auto">
+<div class="bg-soft-sage/40 rounded-3xl p-16 lg:p-24 text-center">
+<h2 class="font-serif text-5xl lg:text-6xl mb-10">Ready to Transform Your Space?</h2>
+<div class="flex flex-col sm:flex-row justify-center gap-6">
+<a class="bg-forest-green text-warm-cream px-12 py-5 rounded-full font-medium hover:opacity-90 transition-opacity" href="#">
+              Book a Free Discovery Call
+            </a>
+<a class="ghost-button px-12 py-5 rounded-full font-medium" href="#">
+              Browse Services
+            </a>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Pre-Footer -->
+</main>
+<!-- BEGIN: Footer -->
+<footer class="bg-warm-cream border-t border-forest-green/10 pt-24 pb-12 px-6 lg:px-12" data-purpose="main-footer">
+<div class="container mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+<!-- Brand -->
+<div>
+<a class="font-serif text-4xl font-medium tracking-tighter mb-8 block" href="/">PI</a>
+<p class="opacity-60 text-sm leading-relaxed max-w-xs">
+            Refining the art of living through sustainable, minimalist design. Based in New York, serving clients worldwide.
+          </p>
+</div>
+<!-- Links -->
+<div>
+<h5 class="uppercase tracking-widest text-xs font-bold mb-8">Navigation</h5>
+<ul class="space-y-4 text-sm opacity-80">
+<li><a class="hover:opacity-100 transition-opacity" href="#">Portfolio</a></li>
+<li><a class="hover:opacity-100 transition-opacity" href="#">Our Process</a></li>
+<li><a class="hover:opacity-100 transition-opacity" href="#">Interior Styling</a></li>
+<li><a class="hover:opacity-100 transition-opacity" href="#">Architectural Design</a></li>
+</ul>
+</div>
+<!-- Contact -->
+<div>
+<h5 class="uppercase tracking-widest text-xs font-bold mb-8">Contact</h5>
+<ul class="space-y-4 text-sm opacity-80">
+<li>hello@progressiveinteriors.com</li>
+<li>+1 (555) 123-4567</li>
+<li>Studio 42, Madison Ave, NYC</li>
+</ul>
+</div>
+<!-- Newsletter -->
+<div>
+<h5 class="uppercase tracking-widest text-xs font-bold mb-8">Journal</h5>
+<p class="text-sm opacity-60 mb-6">Receive curated design inspiration monthly.</p>
+<form class="flex border-b border-forest-green/20 pb-2">
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full p-0 placeholder:text-forest-green/40" placeholder="Email Address" type="email"/>
+<button class="text-xs uppercase font-bold" type="submit">Join</button>
+</form>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-forest-green/5 opacity-40 text-[10px] uppercase tracking-[0.2em]">
+<p>© 2024 Progressive Interiors. All rights reserved.</p>
+<div class="flex space-x-8 mt-4 md:mt-0">
+<a href="#">Privacy Policy</a>
+<a href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+</body></html>
