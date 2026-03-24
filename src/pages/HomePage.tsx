@@ -85,6 +85,22 @@ function useSectionInView(amount = 0.2) {
 /* ════════════════════════════════════════════
    HomePage Component
    ════════════════════════════════════════════ */
+// Nav link → section id mapping
+const NAV_LINKS: { label: string; id: string }[] = [
+  { label: 'Home', id: 'hero' },
+  { label: 'About', id: 'about' },
+  { label: 'Services', id: 'services' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Process', id: 'process' },
+  { label: 'Testimonials', id: 'testimonials' },
+  { label: 'Contact', id: 'contact' },
+]
+
+const scrollToSection = (id: string) => {
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth' })
+}
+
 const HomePage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -121,18 +137,18 @@ const HomePage = () => {
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center space-x-10 text-sm tracking-wide font-medium uppercase">
-            {['Home', 'About', 'Services', 'Projects', 'Process', 'Blog', 'Contact'].map(
+            {NAV_LINKS.map(
               (link, i) => (
                 <motion.a
-                  key={link}
-                  className="nav-link"
-                  href="#"
+                  key={link.label}
+                  className="nav-link cursor-pointer"
+                  onClick={() => scrollToSection(link.id)}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 + i * 0.08, duration: 0.4 }}
                   whileHover={{ y: -2 }}
                 >
-                  {link}
+                  {link.label}
                 </motion.a>
               )
             )}
@@ -141,8 +157,8 @@ const HomePage = () => {
           {/* CTA + Hamburger */}
           <div className="flex items-center space-x-4 lg:space-x-0">
             <motion.a
-              className="bg-forest-green text-warm-cream px-6 py-2.5 lg:px-8 lg:py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
-              href="#"
+              className="bg-forest-green text-warm-cream px-6 py-2.5 lg:px-8 lg:py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer"
+              onClick={() => scrollToSection('contact')}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.4 }}
@@ -172,17 +188,17 @@ const HomePage = () => {
             animate={{ height: 'auto', opacity: 1 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
           >
-            {['Home', 'About', 'Services', 'Projects', 'Process', 'Blog', 'Contact'].map(
+            {NAV_LINKS.map(
               (link, i) => (
                 <motion.a
-                  key={link}
-                  className="block py-2 nav-link"
-                  href="#"
+                  key={link.label}
+                  className="block py-2 nav-link cursor-pointer"
+                  onClick={() => { scrollToSection(link.id); setMobileMenuOpen(false); }}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.06, duration: 0.3 }}
                 >
-                  {link}
+                  {link.label}
                 </motion.a>
               )
             )}
@@ -193,6 +209,7 @@ const HomePage = () => {
       <main>
         {/* ===== HERO SECTION ===== */}
         <section
+          id="hero"
           className="pt-16 lg:pt-20 pb-section lg:pb-desktop-section px-6 lg:px-12 relative overflow-hidden"
           data-purpose="hero"
           ref={hero.ref}
@@ -284,6 +301,7 @@ const HomePage = () => {
 
         {/* ===== STATS STRIP ===== */}
         <section
+          id="stats"
           className="py-10 lg:py-12 bg-warm-cream border-y border-forest-green/10"
           data-purpose="stats"
           ref={stats.ref}
@@ -326,6 +344,7 @@ const HomePage = () => {
 
         {/* ===== OUR SERVICES ===== */}
         <section
+          id="services"
           className="py-section lg:py-desktop-section px-6 lg:px-12"
           data-purpose="services-grid"
           ref={services.ref}
@@ -410,6 +429,7 @@ const HomePage = () => {
 
         {/* ===== BRAND STORY ===== */}
         <section
+          id="about"
           className="py-section lg:py-desktop-section bg-forest-green text-warm-cream"
           data-purpose="brand-story"
           ref={brand.ref}
@@ -472,6 +492,7 @@ const HomePage = () => {
 
         {/* ===== PORTFOLIO ===== */}
         <section
+          id="projects"
           className="py-section lg:py-desktop-section px-6 lg:px-12"
           data-purpose="portfolio-preview"
           ref={portfolio.ref}
@@ -566,6 +587,7 @@ const HomePage = () => {
 
         {/* ===== PROCESS ===== */}
         <section
+          id="process"
           className="py-section lg:py-desktop-section bg-warm-cream"
           data-purpose="design-process"
           ref={process.ref}
@@ -622,6 +644,7 @@ const HomePage = () => {
 
         {/* ===== TESTIMONIALS ===== */}
         <section
+          id="testimonials"
           className="py-section lg:py-desktop-section px-6 lg:px-12 overflow-hidden"
           data-purpose="testimonials"
           ref={testimonials.ref}
@@ -738,6 +761,7 @@ const HomePage = () => {
 
       {/* ===== FOOTER ===== */}
       <footer
+        id="contact"
         className="bg-warm-cream border-t border-forest-green/10 pt-16 lg:pt-24 pb-10 lg:pb-12 px-6 lg:px-12"
         data-purpose="main-footer"
         ref={footer.ref}
