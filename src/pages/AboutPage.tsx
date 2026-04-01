@@ -12,7 +12,7 @@ import {
   glowPulseVariant,
   useSectionInView,
 } from '../utils/animations'
-import brandStudioWorkspace from '../assets/images/brand-studio-workspace.webp'
+import brandStudioWorkspace from '../assets/images/brand-studio-workspace.png'
 import detailSereneHaven1 from '../assets/images/detail-serene-haven-1.webp'
 import detailSereneHaven2 from '../assets/images/detail-serene-haven-2.webp'
 

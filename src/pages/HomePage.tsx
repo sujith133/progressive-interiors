@@ -19,7 +19,7 @@ import heroLivingRoom from '../assets/images/hero-living-room.webp'
 import serviceResidentialDesign from '../assets/images/service-residential-design.webp'
 import serviceSpacePlanning from '../assets/images/service-space-planning.webp'
 import serviceMaterialCuration from '../assets/images/service-material-curation.webp'
-import brandStudioWorkspace from '../assets/images/brand-studio-workspace.webp'
+import brandStudioWorkspace from '../assets/images/brand-studio-workspace.png'
 import projectOakStoneVilla from '../assets/images/project-oak-stone-villa.webp'
 import projectMinimalistPenthouse from '../assets/images/project-minimalist-penthouse.webp'
 

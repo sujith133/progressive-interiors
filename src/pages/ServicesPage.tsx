@@ -15,7 +15,7 @@ import {
 import serviceResidentialDesign from '../assets/images/service-residential-design.webp'
 import serviceSpacePlanning from '../assets/images/service-space-planning.webp'
 import serviceMaterialCuration from '../assets/images/service-material-curation.webp'
-import brandStudioWorkspace from '../assets/images/brand-studio-workspace.webp'
+import brandStudioWorkspace from '../assets/images/brand-studio-workspace.png'
 import detailSereneHaven1 from '../assets/images/detail-serene-haven-1.webp'
 
 gsap.registerPlugin(ScrollTrigger)
