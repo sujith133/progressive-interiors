@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PageLayout from '../components/PageLayout'
+import MagneticButton from '../components/MagneticButton'
+import { useScrollReveal } from '../hooks/useGSAP'
 import {
-  fadeUpVariant,
-  scalePopVariant,
   staggerContainer,
   staggerChild,
   useSectionInView,
@@ -12,17 +14,23 @@ import {
 import { projects, categories } from '../data/projects'
 import projectsHeroCollage from '../assets/images/projects-hero-collage.webp'
 
+gsap.registerPlugin(ScrollTrigger)
 
 /* ════════════════════════════════════════════
-   ProjectsPage Component
+   ProjectsPage Component — GSAP Enhanced
    ════════════════════════════════════════════ */
 const ProjectsPage = () => {
   const [activeFilter, setActiveFilter] = useState<string>('All')
 
-  // Section refs
-  const hero = useSectionInView(0.15)
+  // GSAP hero
+  const heroTagRef = useRef<HTMLSpanElement>(null)
+  const heroTitleRef = useRef<HTMLHeadingElement>(null)
+  const heroSubRef = useRef<HTMLParagraphElement>(null)
+  const heroImageRef = useRef<HTMLImageElement>(null)
+
+  const gridReveal = useScrollReveal({ y: 50, stagger: 0.12, childSelector: '.project-card' })
+
   const filters = useSectionInView(0.3)
-  const grid = useSectionInView(0.1)
   const cta = useSectionInView(0.25)
 
   const filteredProjects =
@@ -30,272 +38,190 @@ const ProjectsPage = () => {
       ? projects
       : projects.filter((p) => p.category === activeFilter)
 
+  // Hero entrance + parallax
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    tl.set([heroTagRef.current, heroTitleRef.current, heroSubRef.current], { opacity: 0, y: 60 })
+    if (heroImageRef.current) {
+      gsap.to(heroImageRef.current, {
+        yPercent: 15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroImageRef.current.parentElement,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
+    }
+
+    tl.to(heroTagRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.3)
+      .to(heroTitleRef.current, { opacity: 1, y: 0, duration: 1 }, 0.5)
+      .to(heroSubRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.8)
+
+    return () => { tl.kill() }
+  }, [])
+
   return (
     <PageLayout>
-        {/* ===== HERO SECTION ===== */}
-        <section
-          className="relative overflow-hidden"
-          data-purpose="projects-hero"
-          ref={hero.ref}
-        >
-          {/* Background Image */}
-          <div className="absolute inset-0 -z-10">
-            <img
-              alt="Our Projects"
-              className="w-full h-full object-cover"
-              src={projectsHeroCollage}
-            />
-            <div className="absolute inset-0 bg-forest-green/70" />
-          </div>
+      {/* ===== HERO ===== */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <img ref={heroImageRef} alt="Our Projects" className="w-full h-full object-cover scale-110" src={projectsHeroCollage} />
+          <div className="absolute inset-0 bg-deep-blue/80" />
+        </div>
 
-          <div className="container mx-auto px-6 lg:px-12 py-32 lg:py-44 text-warm-cream text-center">
-            <motion.span
-              className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-            >
-              Our Portfolio
-            </motion.span>
-            <motion.h1
-              className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 max-w-4xl mx-auto"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.1 }}
-            >
-              Spaces We've Brought to Life
-            </motion.h1>
-            <motion.p
-              className="text-base md:text-lg leading-relaxed opacity-80 max-w-2xl mx-auto"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.2 }}
-            >
-              Each project is a unique narrative — a collaboration between vision, craft, and the art
-              of living well. Explore our curated collection of residential, commercial, and
-              hospitality interiors.
-            </motion.p>
-          </div>
-        </section>
+        <div className="container mx-auto px-6 lg:px-12 py-32 lg:py-44 text-ivory text-center relative z-10">
+          <span ref={heroTagRef} className="text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-6 block">
+            Our Portfolio
+          </span>
+          <h1 ref={heroTitleRef} className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] mb-8 max-w-4xl mx-auto">
+            Spaces We've Brought to <span className="gradient-text-light">Life</span>
+          </h1>
+          <p ref={heroSubRef} className="text-base md:text-lg leading-relaxed opacity-75 max-w-2xl mx-auto">
+            Each project is a unique narrative — a collaboration between vision, craft, and the art
+            of living well. Explore our curated collection of interiors.
+          </p>
+        </div>
+      </section>
 
-        {/* ===== FILTER BAR ===== */}
-        <section
-          className="py-8 lg:py-10 bg-warm-cream border-b border-forest-green/10 sticky top-20 z-40 backdrop-blur-md bg-warm-cream/95"
-          data-purpose="filter-bar"
-          ref={filters.ref}
-        >
-          <div className="container mx-auto px-6 lg:px-12">
+      {/* ===== FILTER BAR ===== */}
+      <section
+        className="py-8 lg:py-10 bg-ivory border-b border-deep-blue/10 sticky top-20 z-40 backdrop-blur-md bg-ivory/95"
+        ref={filters.ref}
+      >
+        <div className="container mx-auto px-6 lg:px-12">
+          <motion.div
+            className="flex flex-wrap justify-center gap-3 lg:gap-4"
+            variants={staggerContainer}
+            initial="hidden"
+            animate={filters.inView ? 'visible' : 'hidden'}
+          >
+            {categories.map((cat) => (
+              <motion.button
+                key={cat}
+                className={`relative px-6 lg:px-8 py-2.5 lg:py-3 rounded-full text-xs lg:text-sm font-medium uppercase tracking-[0.15em] transition-all duration-300
+                  ${
+                    activeFilter === cat
+                      ? 'bg-deep-blue text-ivory'
+                      : 'border border-deep-blue/20 text-deep-blue hover:border-deep-blue/60'
+                  }`}
+                onClick={() => setActiveFilter(cat)}
+                variants={staggerChild}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                layout
+              >
+                {cat}
+                {activeFilter === cat && (
+                  <motion.div
+                    className="absolute inset-0 bg-deep-blue rounded-full -z-10"
+                    layoutId="activeFilter"
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </motion.button>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ===== PROJECT GRID ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12">
+        <div className="container mx-auto">
+          <AnimatePresence mode="wait">
             <motion.div
-              className="flex flex-wrap justify-center gap-3 lg:gap-4"
+              key={activeFilter}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-10"
               variants={staggerContainer}
               initial="hidden"
-              animate={filters.inView ? 'visible' : 'hidden'}
+              animate="visible"
+              exit="hidden"
             >
-              {categories.map((cat) => (
-                <motion.button
-                  key={cat}
-                  className={`relative px-6 lg:px-8 py-2.5 lg:py-3 rounded-full text-xs lg:text-sm font-medium uppercase tracking-widest transition-all duration-300
-                    ${
-                      activeFilter === cat
-                        ? 'bg-forest-green text-warm-cream'
-                        : 'border border-forest-green/20 text-forest-green hover:border-forest-green/60'
-                    }`}
-                  onClick={() => setActiveFilter(cat)}
+              {filteredProjects.map((project, index) => (
+                <motion.div
+                  key={project.slug}
                   variants={staggerChild}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   layout
+                  className="project-card group"
                 >
-                  {cat}
-                  {activeFilter === cat && (
+                  <Link to={`/projects/${project.slug}`} className="block">
                     <motion.div
-                      className="absolute inset-0 bg-forest-green rounded-full -z-10"
-                      layoutId="activeFilter"
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                </motion.button>
+                      className={`overflow-hidden mb-5 lg:mb-6 rounded-xl lg:rounded-2xl relative ${
+                        index % 3 === 0 ? 'aspect-[4/3]' : index % 3 === 1 ? 'aspect-[3/4]' : 'aspect-square'
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      <img
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        src={project.thumbnail}
+                      />
+                      <div className="absolute inset-0 bg-deep-blue/0 group-hover:bg-deep-blue/30 transition-all duration-500 flex items-end p-6 lg:p-8">
+                        <span className="text-ivory text-sm font-medium uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-4 group-hover:translate-y-0" style={{ transition: 'all 0.5s ease' }}>
+                          View Project →
+                        </span>
+                      </div>
+                    </motion.div>
+
+                    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+                      <div>
+                        <h3 className="font-serif text-2xl lg:text-3xl mb-1">{project.title}</h3>
+                        <p className="text-xs lg:text-sm opacity-55 leading-relaxed max-w-md">{project.tagline}</p>
+                      </div>
+                      <span className="text-[10px] lg:text-xs uppercase tracking-[0.15em] opacity-35 whitespace-nowrap">
+                        {project.category}
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
               ))}
             </motion.div>
-          </div>
-        </section>
+          </AnimatePresence>
 
-        {/* ===== PROJECT GRID ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12"
-          data-purpose="project-grid"
-          ref={grid.ref}
-        >
-          <div className="container mx-auto">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeFilter}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-10"
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-              >
-                {filteredProjects.map((project, index) => (
-                  <motion.div
-                    key={project.slug}
-                    variants={staggerChild}
-                    layout
-                    className="group"
-                  >
-                    <Link to={`/projects/${project.slug}`} className="block">
-                      {/* Image Container */}
-                      <motion.div
-                        className={`overflow-hidden mb-5 lg:mb-6 rounded-lg lg:rounded-xl ${
-                          index % 3 === 0
-                            ? 'aspect-[4/3]'
-                            : index % 3 === 1
-                            ? 'aspect-[3/4]'
-                            : 'aspect-square'
-                        }`}
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.4 }}
-                      >
-                        <img
-                          alt={project.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          src={project.thumbnail}
-                        />
-                        {/* Hover Overlay */}
-                        <motion.div
-                          className="absolute inset-0 bg-forest-green/0 group-hover:bg-forest-green/30 transition-all duration-500 flex items-end p-6 lg:p-8"
-                          initial={false}
-                        >
-                          <motion.span
-                            className="text-warm-cream text-sm font-medium uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-y-4 group-hover:translate-y-0"
-                            style={{ transition: 'all 0.5s ease' }}
-                          >
-                            View Project →
-                          </motion.span>
-                        </motion.div>
-                      </motion.div>
+          {filteredProjects.length === 0 && (
+            <motion.div className="text-center py-24" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <p className="font-serif text-3xl mb-4 opacity-35">No projects found</p>
+              <p className="opacity-55 text-sm">Try selecting a different category filter.</p>
+            </motion.div>
+          )}
+        </div>
+      </section>
 
-                      {/* Project Info */}
-                      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
-                        <div>
-                          <motion.h3
-                            className="font-serif text-2xl lg:text-3xl mb-1"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={grid.inView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ delay: 0.3 + index * 0.1 }}
-                          >
-                            {project.title}
-                          </motion.h3>
-                          <motion.p
-                            className="text-xs lg:text-sm opacity-60 leading-relaxed max-w-md"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={grid.inView ? { opacity: 0.6, y: 0 } : {}}
-                            transition={{ delay: 0.4 + index * 0.1 }}
-                          >
-                            {project.tagline}
-                          </motion.p>
-                        </div>
-                        <motion.span
-                          className="text-[10px] lg:text-xs uppercase tracking-widest opacity-40 whitespace-nowrap"
-                          initial={{ opacity: 0 }}
-                          animate={grid.inView ? { opacity: 0.4 } : {}}
-                          transition={{ delay: 0.5 + index * 0.1 }}
-                        >
-                          {project.category}
-                        </motion.span>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
+      {/* ===== CTA ===== */}
+      <section className="pb-section lg:pb-desktop-section px-6 lg:px-12" ref={cta.ref}>
+        <div className="container mx-auto">
+          <motion.div
+            className="bg-gradient-to-br from-deep-blue via-deep-blue to-[#1a2f3d] text-ivory rounded-3xl p-12 md:p-20 lg:p-28 text-center relative overflow-hidden"
+            initial={{ opacity: 0, y: 60, scale: 0.95 }}
+            animate={cta.inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.div className="absolute -top-20 -right-20 w-64 h-64 border border-warm-gold/10 rounded-full" animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }} />
+            <motion.div className="absolute -bottom-32 -left-32 w-96 h-96 border border-warm-gold/10 rounded-full" animate={{ rotate: -360 }} transition={{ duration: 45, repeat: Infinity, ease: 'linear' }} />
 
-            {/* Empty state */}
-            {filteredProjects.length === 0 && (
-              <motion.div
-                className="text-center py-24"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <p className="font-serif text-3xl mb-4 opacity-40">No projects found</p>
-                <p className="opacity-60 text-sm">
-                  Try selecting a different category filter.
-                </p>
-              </motion.div>
-            )}
-          </div>
-        </section>
-
-        {/* ===== CTA BANNER ===== */}
-        <section
-          className="pb-section lg:pb-desktop-section px-6 lg:px-12"
-          data-purpose="projects-cta"
-          ref={cta.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="bg-forest-green text-warm-cream rounded-3xl p-12 md:p-20 lg:p-24 text-center"
-              variants={scalePopVariant}
-              initial="hidden"
-              animate={cta.inView ? 'visible' : 'hidden'}
-            >
-              <motion.span
-                className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={cta.inView ? 'visible' : 'hidden'}
-              >
-                Start Your Journey
-              </motion.span>
-              <motion.h2
-                className="font-serif text-4xl md:text-5xl lg:text-6xl mb-6"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={cta.inView ? 'visible' : 'hidden'}
-                transition={{ delay: 0.1 }}
-              >
-                Have a Project in Mind?
-              </motion.h2>
-              <motion.p
-                className="text-base md:text-lg opacity-80 mb-10 max-w-2xl mx-auto leading-relaxed"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={cta.inView ? 'visible' : 'hidden'}
-                transition={{ delay: 0.2 }}
-              >
+            <div className="relative z-10">
+              <h2 className="font-serif text-4xl md:text-5xl lg:text-7xl mb-6 leading-[1.1]">
+                Have a Project in <span className="gradient-text-light">Mind</span>?
+              </h2>
+              <p className="text-base md:text-lg opacity-70 mb-12 max-w-xl mx-auto leading-relaxed">
                 Let's bring your vision to life. Whether it's a cozy apartment or a grand villa, our
                 team is ready to craft something extraordinary.
-              </motion.p>
-              <motion.div
-                className="flex flex-col sm:flex-row justify-center items-center gap-4 lg:gap-6"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={cta.inView ? 'visible' : 'hidden'}
-                transition={{ delay: 0.3 }}
-              >
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link
-                    className="bg-warm-cream text-forest-green px-8 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto inline-block text-center"
-                    to="/contact"
-                  >
-                    Book a Free Discovery Call
-                  </Link>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link
-                    className="border border-warm-cream/40 text-warm-cream px-8 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:bg-warm-cream/10 transition-all w-full sm:w-auto inline-block text-center"
-                    to="/"
-                  >
-                    Back to Home
-                  </Link>
-                </motion.div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-          </PageLayout>
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
+                <MagneticButton as="a" href="/contact" className="bg-warm-gold text-deep-blue px-10 lg:px-14 py-4 lg:py-5 rounded-full text-sm font-semibold hover:shadow-[0_8px_30px_rgba(248,217,132,0.4)] transition-shadow">
+                  Book a Free Discovery Call
+                </MagneticButton>
+                <MagneticButton as="a" href="/" className="border border-ivory/25 text-ivory px-10 lg:px-14 py-4 lg:py-5 rounded-full text-sm font-medium hover:bg-ivory/8 transition-all">
+                  Back to Home
+                </MagneticButton>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </PageLayout>
   )
 }
 

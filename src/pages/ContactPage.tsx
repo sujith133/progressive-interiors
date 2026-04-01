@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import gsap from 'gsap'
 import PageLayout from '../components/PageLayout'
+import MagneticButton from '../components/MagneticButton'
+import { useScrollReveal } from '../hooks/useGSAP'
 import {
-  fadeUpVariant,
-  fadeLeftVariant,
-  fadeRightVariant,
-  scalePopVariant,
   staggerContainer,
   staggerChild,
   useSectionInView,
@@ -93,17 +92,23 @@ const faqs = [
 ]
 
 /* ════════════════════════════════════════════
-   ContactPage Component
+   ContactPage Component — GSAP Enhanced
    ════════════════════════════════════════════ */
 const ContactPage = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [formSubmitted, setFormSubmitted] = useState(false)
 
-  // Section refs
-  const hero = useSectionInView(0.15)
-  const contactGrid = useSectionInView(0.1)
+  // GSAP hero
+  const heroTagRef = useRef<HTMLSpanElement>(null)
+  const heroTitleRef = useRef<HTMLHeadingElement>(null)
+  const heroSubRef = useRef<HTMLParagraphElement>(null)
+  const heroCTARef = useRef<HTMLDivElement>(null)
+
+  const formReveal = useScrollReveal({ y: 50, stagger: 0.1, childSelector: '.form-item' })
+  const infoReveal = useScrollReveal({ y: 50, stagger: 0.1, childSelector: '.info-item' })
+  const faqReveal = useScrollReveal({ y: 40, stagger: 0.12, childSelector: '.faq-item' })
+
   const map = useSectionInView(0.15)
-  const faqSection = useSectionInView(0.1)
   const cta = useSectionInView(0.25)
 
   const whatsappUrl =
@@ -115,507 +120,313 @@ const ContactPage = () => {
     setTimeout(() => setFormSubmitted(false), 4000)
   }
 
+  // Hero entrance
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    tl.set([heroTagRef.current, heroTitleRef.current, heroSubRef.current, heroCTARef.current], { opacity: 0, y: 60 })
+    tl.to(heroTagRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.3)
+      .to(heroTitleRef.current, { opacity: 1, y: 0, duration: 1 }, 0.5)
+      .to(heroSubRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.8)
+      .to(heroCTARef.current, { opacity: 1, y: 0, duration: 0.8 }, 1)
+    return () => { tl.kill() }
+  }, [])
+
   return (
     <PageLayout>
-        {/* ===== HERO SECTION ===== */}
-        <section
-          className="relative bg-forest-green text-warm-cream overflow-hidden"
-          data-purpose="contact-hero"
-          ref={hero.ref}
-        >
-          {/* Subtle decorative pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
-                backgroundSize: '40px 40px',
-              }}
-            />
+      {/* ===== HERO ===== */}
+      <section className="relative bg-deep-blue text-ivory overflow-hidden">
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+        </div>
+
+        <div className="absolute top-20 left-[15%] gold-particle" />
+        <div className="absolute top-40 right-[20%] gold-particle" />
+        <div className="absolute bottom-20 left-[40%] gold-particle" />
+
+        <div className="container mx-auto px-6 lg:px-12 py-32 lg:py-44 text-center relative z-10">
+          <span ref={heroTagRef} className="text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-6 block">
+            Get In Touch
+          </span>
+          <h1 ref={heroTitleRef} className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] mb-8 max-w-4xl mx-auto">
+            Let's Create Something <span className="gradient-text-light">Beautiful</span>
+          </h1>
+          <p ref={heroSubRef} className="text-base md:text-lg leading-relaxed opacity-75 max-w-2xl mx-auto mb-12">
+            Whether you have a clear vision or need help discovering one, we'd love to hear from
+            you. Let's start the conversation.
+          </p>
+
+          <div ref={heroCTARef} className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <MagneticButton
+              as="a"
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-full text-sm font-medium hover:bg-[#20BD5A] transition-colors"
+            >
+              <WhatsAppIcon />
+              Message on WhatsApp
+            </MagneticButton>
+            <MagneticButton
+              as="a"
+              href="tel:+919052525249"
+              className="inline-flex items-center gap-3 border border-ivory/25 text-ivory px-8 py-4 rounded-full text-sm font-medium hover:bg-ivory/8 transition-all"
+            >
+              <PhoneIcon />
+              Call Us Directly
+            </MagneticButton>
           </div>
+        </div>
+      </section>
 
-          <div className="container mx-auto px-6 lg:px-12 py-28 lg:py-40 text-center relative z-10">
-            <motion.span
-              className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-            >
-              Get In Touch
-            </motion.span>
-            <motion.h1
-              className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 max-w-4xl mx-auto"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.1 }}
-            >
-              Let's Create Something Beautiful
-            </motion.h1>
-            <motion.p
-              className="text-base md:text-lg leading-relaxed opacity-80 max-w-2xl mx-auto mb-10"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.2 }}
-            >
-              Whether you have a clear vision or need help discovering one, we'd love to hear from
-              you. Let's start the conversation.
-            </motion.p>
+      {/* ===== CONTACT GRID (Form + Info) ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+            {/* LEFT: Form */}
+            <div ref={formReveal}>
+              <span className="form-item text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+                Send a Message
+              </span>
+              <h2 className="form-item font-serif text-3xl lg:text-4xl mb-8 leading-tight">
+                Tell Us About Your Project
+              </h2>
 
-            {/* Quick action buttons */}
-            <motion.div
-              className="flex flex-col sm:flex-row justify-center items-center gap-4"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.3 }}
-            >
-              <motion.a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-full text-sm font-medium hover:bg-[#20BD5A] transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <WhatsAppIcon />
-                Message on WhatsApp
-              </motion.a>
-              <motion.a
-                href="tel:+919052525249"
-                className="inline-flex items-center gap-3 border border-warm-cream/30 text-warm-cream px-8 py-4 rounded-full text-sm font-medium hover:bg-warm-cream/10 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <PhoneIcon />
-                Call Us Directly
-              </motion.a>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ===== CONTACT GRID (Form + Info) ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12"
-          data-purpose="contact-grid"
-          ref={contactGrid.ref}
-        >
-          <div className="container mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-              {/* LEFT: Contact Form */}
-              <motion.div
-                variants={fadeLeftVariant}
-                initial="hidden"
-                animate={contactGrid.inView ? 'visible' : 'hidden'}
-              >
-                <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                  Send a Message
-                </span>
-                <h2 className="font-serif text-3xl lg:text-4xl mb-8 leading-tight">
-                  Tell Us About Your Project
-                </h2>
-
-                <AnimatePresence mode="wait">
-                  {formSubmitted ? (
-                    <motion.div
-                      key="success"
-                      className="bg-soft-sage/20 border border-soft-sage/30 rounded-2xl p-10 text-center"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                    >
-                      <div className="text-4xl mb-4">✓</div>
-                      <h3 className="font-serif text-2xl mb-2">Thank You!</h3>
-                      <p className="text-sm opacity-70">
-                        We've received your message and will get back to you within 24 hours.
-                      </p>
-                    </motion.div>
-                  ) : (
-                    <motion.form
-                      key="form"
-                      className="space-y-6"
-                      onSubmit={handleSubmit}
-                      initial={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-xs uppercase tracking-widest font-medium mb-2 opacity-60">
-                            Full Name *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            className="w-full bg-transparent border-b-2 border-forest-green/15 focus:border-forest-green/60 py-3 text-sm outline-none transition-colors placeholder:text-forest-green/30"
-                            placeholder="Your name"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs uppercase tracking-widest font-medium mb-2 opacity-60">
-                            Email Address *
-                          </label>
-                          <input
-                            type="email"
-                            required
-                            className="w-full bg-transparent border-b-2 border-forest-green/15 focus:border-forest-green/60 py-3 text-sm outline-none transition-colors placeholder:text-forest-green/30"
-                            placeholder="you@email.com"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-xs uppercase tracking-widest font-medium mb-2 opacity-60">
-                            Phone Number
-                          </label>
-                          <input
-                            type="tel"
-                            className="w-full bg-transparent border-b-2 border-forest-green/15 focus:border-forest-green/60 py-3 text-sm outline-none transition-colors placeholder:text-forest-green/30"
-                            placeholder="+91 XXXXX XXXXX"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs uppercase tracking-widest font-medium mb-2 opacity-60">
-                            Service Interested In
-                          </label>
-                          <select className="w-full bg-transparent border-b-2 border-forest-green/15 focus:border-forest-green/60 py-3 text-sm outline-none transition-colors appearance-none cursor-pointer">
-                            <option value="">Select a service</option>
-                            <option value="residential">Residential Design</option>
-                            <option value="space-planning">Space Planning & Renovation</option>
-                            <option value="material-curation">Material & Decor Curation</option>
-                            <option value="other">Other / Not Sure</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs uppercase tracking-widest font-medium mb-2 opacity-60">
-                          Your Message *
-                        </label>
-                        <textarea
-                          required
-                          rows={5}
-                          className="w-full bg-transparent border-b-2 border-forest-green/15 focus:border-forest-green/60 py-3 text-sm outline-none transition-colors resize-none placeholder:text-forest-green/30"
-                          placeholder="Tell us about your space, vision, and any specific requirements..."
-                        />
-                      </div>
-
-                      <motion.button
-                        type="submit"
-                        className="bg-forest-green text-warm-cream px-10 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Send Message
-                      </motion.button>
-                    </motion.form>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-
-              {/* RIGHT: Contact Information */}
-              <motion.div
-                variants={fadeRightVariant}
-                initial="hidden"
-                animate={contactGrid.inView ? 'visible' : 'hidden'}
-              >
-                <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                  Visit Our Studio
-                </span>
-                <h2 className="font-serif text-3xl lg:text-4xl mb-10 leading-tight">
-                  We'd Love to Meet You
-                </h2>
-
-                {/* Contact Info Cards */}
-                <motion.div
-                  className="space-y-6 mb-12"
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate={contactGrid.inView ? 'visible' : 'hidden'}
-                >
+              <AnimatePresence mode="wait">
+                {formSubmitted ? (
                   <motion.div
-                    className="flex items-start gap-5 p-5 bg-forest-green/[0.03] rounded-xl border border-forest-green/5"
-                    variants={staggerChild}
-                    whileHover={{ x: 4, transition: { duration: 0.2 } }}
+                    key="success"
+                    className="form-item bg-warm-gold/20 border border-warm-gold/30 rounded-2xl p-10 text-center"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
                   >
-                    <div className="w-12 h-12 bg-soft-sage/25 rounded-full flex items-center justify-center flex-shrink-0 text-forest-green">
-                      <MapPinIcon />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-sm mb-1">Our Studio</h4>
-                      <p className="text-sm opacity-60 leading-relaxed">
-                        2nd Floor, Brindavan Colony,<br />
-                        Lakshmipuram Colony, Rukminipuri Colony,<br />
-                        A. S. Rao Nagar, Hyderabad,<br />
-                        Secunderabad, Telangana 500062
-                      </p>
-                    </div>
+                    <div className="text-4xl mb-4 text-gold-dark">✓</div>
+                    <h3 className="font-serif text-2xl mb-2">Thank You!</h3>
+                    <p className="text-sm opacity-65">We've received your message and will get back to you within 24 hours.</p>
                   </motion.div>
+                ) : (
+                  <motion.form key="form" className="form-item space-y-6" onSubmit={handleSubmit} initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Full Name *</label>
+                        <input type="text" required className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30" placeholder="Your name" />
+                      </div>
+                      <div>
+                        <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Email Address *</label>
+                        <input type="email" required className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30" placeholder="you@email.com" />
+                      </div>
+                    </div>
 
-                  <motion.a
-                    href="mailto:hello@progressiveinteriors.in"
-                    className="flex items-start gap-5 p-5 bg-forest-green/[0.03] rounded-xl border border-forest-green/5 block"
-                    variants={staggerChild}
-                    whileHover={{ x: 4, transition: { duration: 0.2 } }}
-                  >
-                    <div className="w-12 h-12 bg-soft-sage/25 rounded-full flex items-center justify-center flex-shrink-0 text-forest-green">
-                      <MailIcon />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Phone Number</label>
+                        <input type="tel" className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30" placeholder="+91 XXXXX XXXXX" />
+                      </div>
+                      <div>
+                        <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Service Interested In</label>
+                        <select className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors appearance-none cursor-pointer">
+                          <option value="">Select a service</option>
+                          <option value="residential">Residential Design</option>
+                          <option value="space-planning">Space Planning & Renovation</option>
+                          <option value="material-curation">Material & Decor Curation</option>
+                          <option value="other">Other / Not Sure</option>
+                        </select>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-medium text-sm mb-1">Email Us</h4>
-                      <p className="text-sm opacity-60">hello@progressiveinteriors.in</p>
-                    </div>
-                  </motion.a>
 
-                  <motion.a
-                    href="tel:+919052525249"
-                    className="flex items-start gap-5 p-5 bg-forest-green/[0.03] rounded-xl border border-forest-green/5 block"
-                    variants={staggerChild}
-                    whileHover={{ x: 4, transition: { duration: 0.2 } }}
-                  >
-                    <div className="w-12 h-12 bg-soft-sage/25 rounded-full flex items-center justify-center flex-shrink-0 text-forest-green">
-                      <PhoneIcon />
-                    </div>
                     <div>
-                      <h4 className="font-medium text-sm mb-1">Call Us</h4>
-                      <p className="text-sm opacity-60">+91 90525 25249</p>
+                      <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Your Message *</label>
+                      <textarea required rows={5} className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors resize-none placeholder:text-deep-blue/30" placeholder="Tell us about your space, vision, and any specific requirements..." />
                     </div>
-                  </motion.a>
 
-                  <motion.a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-start gap-5 p-5 bg-[#25D366]/[0.08] rounded-xl border border-[#25D366]/15 block"
-                    variants={staggerChild}
-                    whileHover={{ x: 4, transition: { duration: 0.2 } }}
-                  >
-                    <div className="w-12 h-12 bg-[#25D366]/20 rounded-full flex items-center justify-center flex-shrink-0 text-[#25D366]">
-                      <WhatsAppIcon />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-sm mb-1">WhatsApp</h4>
-                      <p className="text-sm opacity-60">Quick chat — typically replies within an hour</p>
-                    </div>
-                  </motion.a>
+                    <MagneticButton type="submit" className="btn-shimmer text-ivory px-10 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:shadow-lg transition-shadow">
+                      Send Message
+                    </MagneticButton>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* RIGHT: Contact Info */}
+            <div ref={infoReveal}>
+              <span className="info-item text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+                Visit Our Studio
+              </span>
+              <h2 className="info-item font-serif text-3xl lg:text-4xl mb-10 leading-tight">
+                We'd Love to Meet You
+              </h2>
+
+              <div className="info-item space-y-6 mb-12">
+                <motion.div className="flex items-start gap-5 p-5 bg-deep-blue/[0.03] rounded-xl border border-deep-blue/5" whileHover={{ x: 4, transition: { duration: 0.2 } }}>
+                  <div className="w-12 h-12 bg-warm-gold/20 rounded-full flex items-center justify-center flex-shrink-0 text-deep-blue"><MapPinIcon /></div>
+                  <div>
+                    <h4 className="font-medium text-sm mb-1">Our Studio</h4>
+                    <p className="text-sm opacity-55 leading-relaxed">2nd Floor, Brindavan Colony,<br />Lakshmipuram Colony, Rukminipuri Colony,<br />A. S. Rao Nagar, Hyderabad,<br />Secunderabad, Telangana 500062</p>
+                  </div>
                 </motion.div>
 
-                {/* Social Media Links */}
-                <div>
-                  <h4 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-5">
-                    Follow Us
-                  </h4>
-                  <div className="flex gap-4">
-                    {[
-                      {
-                        icon: <FacebookIcon />,
-                        label: 'Facebook',
-                        href: 'https://www.facebook.com/people/Progressive-Interiors/61579745137532/',
-                      },
-                      {
-                        icon: <InstagramIcon />,
-                        label: 'Instagram',
-                        href: 'https://www.instagram.com/progressiveinteriors.in/',
-                      },
-                      {
-                        icon: <LinkedInIcon />,
-                        label: 'LinkedIn',
-                        href: 'https://www.linkedin.com/company/progressiveinteriors/',
-                      },
-                    ].map((social) => (
-                      <motion.a
-                        key={social.label}
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 bg-forest-green/[0.06] hover:bg-forest-green hover:text-warm-cream rounded-full flex items-center justify-center transition-all duration-300 text-forest-green"
-                        whileHover={{ scale: 1.15, rotate: 5 }}
-                        whileTap={{ scale: 0.95 }}
-                        aria-label={social.label}
-                      >
-                        {social.icon}
-                      </motion.a>
-                    ))}
+                <motion.a href="mailto:hello@progressiveinteriors.in" className="flex items-start gap-5 p-5 bg-deep-blue/[0.03] rounded-xl border border-deep-blue/5 block" whileHover={{ x: 4, transition: { duration: 0.2 } }}>
+                  <div className="w-12 h-12 bg-warm-gold/20 rounded-full flex items-center justify-center flex-shrink-0 text-deep-blue"><MailIcon /></div>
+                  <div>
+                    <h4 className="font-medium text-sm mb-1">Email Us</h4>
+                    <p className="text-sm opacity-55">hello@progressiveinteriors.in</p>
                   </div>
+                </motion.a>
+
+                <motion.a href="tel:+919052525249" className="flex items-start gap-5 p-5 bg-deep-blue/[0.03] rounded-xl border border-deep-blue/5 block" whileHover={{ x: 4, transition: { duration: 0.2 } }}>
+                  <div className="w-12 h-12 bg-warm-gold/20 rounded-full flex items-center justify-center flex-shrink-0 text-deep-blue"><PhoneIcon /></div>
+                  <div>
+                    <h4 className="font-medium text-sm mb-1">Call Us</h4>
+                    <p className="text-sm opacity-55">+91 90525 25249</p>
+                  </div>
+                </motion.a>
+
+                <motion.a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-start gap-5 p-5 bg-[#25D366]/[0.08] rounded-xl border border-[#25D366]/15 block" whileHover={{ x: 4, transition: { duration: 0.2 } }}>
+                  <div className="w-12 h-12 bg-[#25D366]/20 rounded-full flex items-center justify-center flex-shrink-0 text-[#25D366]"><WhatsAppIcon /></div>
+                  <div>
+                    <h4 className="font-medium text-sm mb-1">WhatsApp</h4>
+                    <p className="text-sm opacity-55">Quick chat — typically replies within an hour</p>
+                  </div>
+                </motion.a>
+              </div>
+
+              {/* Social */}
+              <div className="info-item">
+                <h4 className="uppercase tracking-[0.15em] text-[10px] lg:text-xs font-bold mb-5">Follow Us</h4>
+                <div className="flex gap-4">
+                  {[
+                    { icon: <FacebookIcon />, label: 'Facebook', href: 'https://www.facebook.com/people/Progressive-Interiors/61579745137532/' },
+                    { icon: <InstagramIcon />, label: 'Instagram', href: 'https://www.instagram.com/progressiveinteriors.in/' },
+                    { icon: <LinkedInIcon />, label: 'LinkedIn', href: 'https://www.linkedin.com/company/progressiveinteriors/' },
+                  ].map((social) => (
+                    <motion.a
+                      key={social.label}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 bg-deep-blue/[0.06] hover:bg-warm-gold hover:text-deep-blue rounded-full flex items-center justify-center transition-all duration-300 text-deep-blue"
+                      whileHover={{ scale: 1.15, rotate: 5 }}
+                      whileTap={{ scale: 0.95 }}
+                      aria-label={social.label}
+                    >
+                      {social.icon}
+                    </motion.a>
+                  ))}
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ===== MAP SECTION ===== */}
-        <section
-          className="px-6 lg:px-12 pb-section lg:pb-desktop-section"
-          data-purpose="map"
-          ref={map.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="rounded-2xl overflow-hidden border border-forest-green/10 shadow-sm"
-              variants={scalePopVariant}
-              initial="hidden"
-              animate={map.inView ? 'visible' : 'hidden'}
-            >
-              <iframe
-                title="Progressive Interiors Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3805.5!2d78.5!3d17.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sA.%20S.%20Rao%20Nagar%2C%20Hyderabad!5e0!3m2!1sen!2sin!4v1"
-                width="100%"
-                height="450"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-[300px] sm:h-[400px] lg:h-[450px]"
-              />
-            </motion.div>
+      {/* ===== MAP ===== */}
+      <section className="px-6 lg:px-12 pb-section lg:pb-desktop-section" ref={map.ref}>
+        <div className="container mx-auto">
+          <motion.div
+            className="rounded-2xl overflow-hidden border border-deep-blue/10 shadow-sm"
+            initial={{ opacity: 0, y: 40, scale: 0.97 }}
+            animate={map.inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <iframe
+              title="Progressive Interiors Location"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3805.5!2d78.5!3d17.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sA.%20S.%20Rao%20Nagar%2C%20Hyderabad!5e0!3m2!1sen!2sin!4v1"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full h-[300px] sm:h-[400px] lg:h-[450px]"
+            />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ===== FAQ ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12 bg-deep-blue/[0.02]">
+        <div className="container mx-auto max-w-3xl">
+          <div ref={useScrollReveal({ y: 40 })} className="text-center mb-14 lg:mb-20">
+            <span className="text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+              Common Questions
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">
+              Frequently Asked <span className="gradient-text">Questions</span>
+            </h2>
           </div>
-        </section>
 
-        {/* ===== FAQ SECTION ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12 bg-forest-green/[0.02]"
-          data-purpose="faq"
-          ref={faqSection.ref}
-        >
-          <div className="container mx-auto max-w-3xl">
-            <motion.div
-              className="text-center mb-14 lg:mb-20"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={faqSection.inView ? 'visible' : 'hidden'}
-            >
-              <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                Common Questions
-              </span>
-              <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-                Frequently Asked Questions
-              </h2>
-            </motion.div>
-
-            <motion.div
-              className="space-y-4"
-              variants={staggerContainer}
-              initial="hidden"
-              animate={faqSection.inView ? 'visible' : 'hidden'}
-            >
-              {faqs.map((faq, i) => (
-                <motion.div
-                  key={i}
-                  className="border border-forest-green/10 rounded-xl overflow-hidden bg-white"
-                  variants={staggerChild}
+          <div ref={faqReveal}>
+            {faqs.map((faq, i) => (
+              <div key={i} className="faq-item border border-deep-blue/10 rounded-xl overflow-hidden bg-white mb-4">
+                <button
+                  className="w-full flex items-center justify-between p-6 text-left hover:bg-deep-blue/[0.02] transition-colors"
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 >
-                  <button
-                    className="w-full flex items-center justify-between p-6 text-left hover:bg-forest-green/[0.02] transition-colors"
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  >
-                    <span className="font-serif text-lg lg:text-xl pr-4">{faq.question}</span>
-                    <motion.div
-                      animate={{ rotate: openFaq === i ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex-shrink-0 opacity-40"
-                    >
-                      <ChevronDownIcon />
-                    </motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {openFaq === i && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as const }}
-                      >
-                        <div className="px-6 pb-6 text-sm lg:text-base opacity-70 leading-relaxed">
-                          {faq.answer}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ===== CTA BANNER ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12"
-          data-purpose="contact-cta"
-          ref={cta.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="bg-forest-green text-warm-cream rounded-3xl p-12 md:p-20 lg:p-24 text-center relative overflow-hidden"
-              variants={scalePopVariant}
-              initial="hidden"
-              animate={cta.inView ? 'visible' : 'hidden'}
-            >
-              {/* Decorative circles */}
-              <div className="absolute -top-20 -right-20 w-64 h-64 border border-warm-cream/5 rounded-full" />
-              <div className="absolute -bottom-32 -left-32 w-96 h-96 border border-warm-cream/5 rounded-full" />
-
-              <div className="relative z-10">
-                <motion.span
-                  className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
-                  variants={fadeUpVariant}
-                  initial="hidden"
-                  animate={cta.inView ? 'visible' : 'hidden'}
-                >
-                  Prefer a Quick Chat?
-                </motion.span>
-                <motion.h2
-                  className="font-serif text-4xl md:text-5xl lg:text-6xl mb-6"
-                  variants={fadeUpVariant}
-                  initial="hidden"
-                  animate={cta.inView ? 'visible' : 'hidden'}
-                  transition={{ delay: 0.1 }}
-                >
-                  We're Just a Message Away
-                </motion.h2>
-                <motion.p
-                  className="text-base md:text-lg opacity-80 mb-10 max-w-2xl mx-auto leading-relaxed"
-                  variants={fadeUpVariant}
-                  initial="hidden"
-                  animate={cta.inView ? 'visible' : 'hidden'}
-                  transition={{ delay: 0.2 }}
-                >
-                  Drop us a message on WhatsApp for a quick response. We typically reply within an
-                  hour during business hours (Mon–Sat, 10 AM – 7 PM IST).
-                </motion.p>
-                <motion.div
-                  className="flex flex-col sm:flex-row justify-center items-center gap-4"
-                  variants={fadeUpVariant}
-                  initial="hidden"
-                  animate={cta.inView ? 'visible' : 'hidden'}
-                  transition={{ delay: 0.3 }}
-                >
-                  <motion.a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 bg-[#25D366] text-white px-10 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:bg-[#20BD5A] transition-colors"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <WhatsAppIcon />
-                    Chat on WhatsApp
-                  </motion.a>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Link
-                      className="border border-warm-cream/40 text-warm-cream px-8 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:bg-warm-cream/10 transition-all inline-block"
-                      to="/projects"
-                    >
-                      Explore Our Work
-                    </Link>
+                  <span className="font-serif text-lg lg:text-xl pr-4">{faq.question}</span>
+                  <motion.div animate={{ rotate: openFaq === i ? 180 : 0 }} transition={{ duration: 0.3 }} className="flex-shrink-0 opacity-40">
+                    <ChevronDownIcon />
                   </motion.div>
-                </motion.div>
+                </button>
+                <AnimatePresence>
+                  {openFaq === i && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+                    >
+                      <div className="px-6 pb-6 text-sm lg:text-base opacity-65 leading-relaxed">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-            </motion.div>
+            ))}
           </div>
-        </section>
-      
+        </div>
+      </section>
+
+      {/* ===== CTA ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12" ref={cta.ref}>
+        <div className="container mx-auto">
+          <motion.div
+            className="bg-gradient-to-br from-deep-blue via-deep-blue to-[#1a2f3d] text-ivory rounded-3xl p-12 md:p-20 lg:p-28 text-center relative overflow-hidden"
+            initial={{ opacity: 0, y: 60, scale: 0.95 }}
+            animate={cta.inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.div className="absolute -top-20 -right-20 w-64 h-64 border border-warm-gold/10 rounded-full" animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }} />
+            <motion.div className="absolute -bottom-32 -left-32 w-96 h-96 border border-warm-gold/10 rounded-full" animate={{ rotate: -360 }} transition={{ duration: 45, repeat: Infinity, ease: 'linear' }} />
+
+            <div className="relative z-10">
+              <h2 className="font-serif text-4xl md:text-5xl lg:text-7xl mb-6 leading-[1.1]">
+                We're Just a Message <span className="gradient-text-light">Away</span>
+              </h2>
+              <p className="text-base md:text-lg opacity-70 mb-12 max-w-xl mx-auto leading-relaxed">
+                Drop us a message on WhatsApp for a quick response. We typically reply within an
+                hour during business hours (Mon–Sat, 10 AM – 7 PM IST).
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
+                <MagneticButton
+                  as="a"
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 bg-[#25D366] text-white px-10 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:bg-[#20BD5A] transition-colors"
+                >
+                  <WhatsAppIcon />
+                  Chat on WhatsApp
+                </MagneticButton>
+                <MagneticButton as="a" href="/projects" className="border border-ivory/25 text-ivory px-10 lg:px-14 py-4 lg:py-5 rounded-full text-sm font-medium hover:bg-ivory/8 transition-all">
+                  Explore Our Work
+                </MagneticButton>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ===== FLOATING WHATSAPP BUTTON ===== */}
       <motion.a
         href={whatsappUrl}

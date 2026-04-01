@@ -75,10 +75,10 @@ const ProjectDetailPage = () => {
                 src={project.thumbnail}
               />
               {/* Title overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-forest-green/80 via-transparent to-transparent flex items-end">
+              <div className="absolute inset-0 bg-gradient-to-t from-deep-blue/80 via-transparent to-transparent flex items-end">
                 <div className="p-8 md:p-12 lg:p-16">
                   <motion.span
-                    className="text-soft-sage text-xs lg:text-sm uppercase tracking-widest mb-3 block"
+                    className="text-warm-gold text-xs lg:text-sm uppercase tracking-widest mb-3 block"
                     initial={{ opacity: 0, y: 20 }}
                     animate={hero.inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.4 }}
@@ -86,7 +86,7 @@ const ProjectDetailPage = () => {
                     {project.category}
                   </motion.span>
                   <motion.h1
-                    className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-warm-cream"
+                    className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-ivory"
                     initial={{ opacity: 0, y: 30 }}
                     animate={hero.inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.5, duration: 0.6 }}
@@ -108,7 +108,7 @@ const ProjectDetailPage = () => {
           <div className="container mx-auto">
             {/* Stats Row */}
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-12 mb-16 lg:mb-20 pb-12 border-b border-forest-green/10"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-12 mb-16 lg:mb-20 pb-12 border-b border-deep-blue/10"
               variants={staggerContainer}
               initial="hidden"
               animate={info.inView ? 'visible' : 'hidden'}
@@ -147,7 +147,7 @@ const ProjectDetailPage = () => {
                 initial="hidden"
                 animate={info.inView ? 'visible' : 'hidden'}
               >
-                <blockquote className="font-serif text-2xl lg:text-3xl italic leading-relaxed opacity-70 border-l-2 border-soft-sage pl-8">
+                <blockquote className="font-serif text-2xl lg:text-3xl italic leading-relaxed opacity-70 border-l-2 border-warm-gold pl-8">
                   "{project.tagline}"
                 </blockquote>
               </motion.div>
@@ -207,7 +207,7 @@ const ProjectDetailPage = () => {
         >
           <div className="container mx-auto">
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 border-t border-forest-green/10 pt-12"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 border-t border-deep-blue/10 pt-12"
               variants={staggerContainer}
               initial="hidden"
               animate={nav.inView ? 'visible' : 'hidden'}
@@ -217,7 +217,7 @@ const ProjectDetailPage = () => {
                 <motion.div variants={staggerChild}>
                   <Link
                     to={`/projects/${prevProject.slug}`}
-                    className="group block p-6 lg:p-8 rounded-xl border border-forest-green/10 hover:border-forest-green/30 transition-all"
+                    className="group block p-6 lg:p-8 rounded-xl border border-deep-blue/10 hover:border-warm-gold/40 transition-all hover-glow"
                   >
                     <span className="text-[10px] lg:text-xs uppercase tracking-widest opacity-50 mb-2 block">
                       ← Previous Project
@@ -237,7 +237,7 @@ const ProjectDetailPage = () => {
                 <motion.div variants={staggerChild} className="text-right">
                   <Link
                     to={`/projects/${nextProject.slug}`}
-                    className="group block p-6 lg:p-8 rounded-xl border border-forest-green/10 hover:border-forest-green/30 transition-all"
+                    className="group block p-6 lg:p-8 rounded-xl border border-deep-blue/10 hover:border-warm-gold/40 transition-all hover-glow"
                   >
                     <span className="text-[10px] lg:text-xs uppercase tracking-widest opacity-50 mb-2 block">
                       Next Project →

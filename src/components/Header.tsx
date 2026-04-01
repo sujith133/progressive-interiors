@@ -19,10 +19,10 @@ const Header = () => {
 
   return (
     <motion.header
-      className="sticky top-0 z-50 bg-warm-cream/90 backdrop-blur-md border-b border-forest-green/5"
+      className="sticky top-0 z-50 bg-ivory/80 backdrop-blur-xl border-b border-deep-blue/5 shadow-sm"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
     >
       <nav className="container mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -43,7 +43,7 @@ const Header = () => {
               <Link
                 className={`nav-link transition-all ${
                   isActive(link.to)
-                    ? 'opacity-100 border-b-2 border-forest-green pb-0.5'
+                    ? 'opacity-100 border-b-2 border-warm-gold pb-0.5'
                     : 'opacity-70 hover:opacity-100'
                 }`}
                 to={link.to}
@@ -63,7 +63,7 @@ const Header = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Link
-              className="bg-forest-green text-warm-cream px-6 py-2.5 lg:px-8 lg:py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+              className="btn-shimmer text-ivory px-6 py-2.5 lg:px-8 lg:py-3 rounded-full text-sm font-medium hover:shadow-lg transition-shadow"
               to="/contact"
             >
               Book Consultation
@@ -74,7 +74,7 @@ const Header = () => {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            <span className="material-symbols-outlined text-forest-green text-3xl">
+            <span className="material-symbols-outlined text-deep-blue text-3xl">
               {mobileMenuOpen ? 'close' : 'menu'}
             </span>
           </button>
@@ -83,7 +83,7 @@ const Header = () => {
 
       {mobileMenuOpen && (
         <motion.div
-          className="lg:hidden bg-warm-cream border-t border-forest-green/5 px-6 py-6 space-y-4 text-sm tracking-wide font-medium uppercase"
+          className="lg:hidden bg-ivory/95 backdrop-blur-xl border-t border-deep-blue/5 px-6 py-6 space-y-4 text-sm tracking-wide font-medium uppercase"
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
           transition={{ duration: 0.35, ease: 'easeOut' }}
@@ -98,7 +98,7 @@ const Header = () => {
               <Link
                 className={`block py-2 nav-link transition-all ${
                   isActive(link.to)
-                    ? 'opacity-100 pl-2 border-l-2 border-forest-green'
+                    ? 'opacity-100 pl-2 border-l-2 border-warm-gold'
                     : 'opacity-70'
                 }`}
                 to={link.to}

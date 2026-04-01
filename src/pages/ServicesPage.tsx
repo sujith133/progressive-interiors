@@ -1,13 +1,16 @@
+import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PageLayout from '../components/PageLayout'
+import ParallaxImage from '../components/ParallaxImage'
+import MagneticButton from '../components/MagneticButton'
+import { useScrollReveal } from '../hooks/useGSAP'
 import {
-  fadeUpVariant,
-  fadeLeftVariant,
-  fadeRightVariant,
-  scalePopVariant,
   staggerContainer,
   staggerChild,
+  glowPulseVariant,
   useSectionInView,
 } from '../utils/animations'
 import serviceResidentialDesign from '../assets/images/service-residential-design.webp'
@@ -15,6 +18,8 @@ import serviceSpacePlanning from '../assets/images/service-space-planning.webp'
 import serviceMaterialCuration from '../assets/images/service-material-curation.webp'
 import brandStudioWorkspace from '../assets/images/brand-studio-workspace.webp'
 import detailSereneHaven1 from '../assets/images/detail-serene-haven-1.webp'
+
+gsap.registerPlugin(ScrollTrigger)
 
 /* ────────────────────────────────────────────
    Service data
@@ -91,495 +96,321 @@ const testimonials = [
 ]
 
 /* ════════════════════════════════════════════
-   ServicesPage Component
+   ServicesPage Component — GSAP Enhanced
    ════════════════════════════════════════════ */
 const ServicesPage = () => {
-  // Section refs
-  const hero = useSectionInView(0.15)
-  const serviceGrid = useSectionInView(0.1)
-  const approach = useSectionInView(0.15)
-  const process = useSectionInView(0.1)
+  // GSAP hero
+  const heroTagRef = useRef<HTMLSpanElement>(null)
+  const heroTitleRef = useRef<HTMLHeadingElement>(null)
+  const heroSubRef = useRef<HTMLParagraphElement>(null)
+
+  const serviceCardsReveal = useScrollReveal({ y: 60, stagger: 0.2, childSelector: '.service-item' })
+  const approachRow1 = useScrollReveal({ y: 50, stagger: 0.12, childSelector: '.approach-item-1' })
+  const approachRow2 = useScrollReveal({ y: 50, stagger: 0.12, childSelector: '.approach-item-2' })
+  const processReveal = useScrollReveal({ y: 50, stagger: 0.15, childSelector: '.process-step' })
+
   const stats = useSectionInView(0.25)
   const testimonialsSection = useSectionInView(0.1)
   const cta = useSectionInView(0.25)
 
+  // Hero entrance
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    tl.set([heroTagRef.current, heroTitleRef.current, heroSubRef.current], { opacity: 0, y: 60 })
+    tl.to(heroTagRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.3)
+      .to(heroTitleRef.current, { opacity: 1, y: 0, duration: 1 }, 0.5)
+      .to(heroSubRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.8)
+    return () => { tl.kill() }
+  }, [])
+
   return (
     <PageLayout>
-        {/* ===== HERO SECTION ===== */}
-        <section
-          className="relative overflow-hidden"
-          data-purpose="services-hero"
-          ref={hero.ref}
-        >
-          <div className="absolute inset-0 -z-10">
-            <img
-              alt="Our Services"
-              className="w-full h-full object-cover"
-              src={serviceResidentialDesign}
+      {/* ===== HERO ===== */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <img alt="Our Services" className="w-full h-full object-cover" src={serviceResidentialDesign} />
+          <div className="absolute inset-0 bg-deep-blue/80" />
+        </div>
+
+        <div className="container mx-auto px-6 lg:px-12 py-32 lg:py-44 text-ivory text-center relative z-10">
+          <span ref={heroTagRef} className="text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-6 block">
+            What We Do
+          </span>
+          <h1 ref={heroTitleRef} className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] mb-8 max-w-4xl mx-auto">
+            Crafting Spaces That <span className="gradient-text-light">Inspire</span>
+          </h1>
+          <p ref={heroSubRef} className="text-base md:text-lg leading-relaxed opacity-75 max-w-2xl mx-auto">
+            From concept to final reveal, we offer a complete spectrum of interior design services
+            tailored to your lifestyle. Every project is a unique collaboration between vision,
+            craft, and the art of refined living.
+          </p>
+        </div>
+      </section>
+
+      {/* ===== SERVICE CARDS with Parallax ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12">
+        <div className="container mx-auto">
+          <div ref={useScrollReveal({ y: 40 })} className="text-center mb-16 lg:mb-24">
+            <span className="text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+              Our Expertise
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight max-w-2xl mx-auto">
+              Three Pillars of <span className="gradient-text">Exceptional</span> Design
+            </h2>
+          </div>
+
+          <div ref={serviceCardsReveal} className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+            {services.map((service, index) => (
+              <div key={service.title} className="service-item group">
+                <ParallaxImage
+                  src={service.image}
+                  alt={service.title}
+                  className={`mb-6 lg:mb-8 rounded-2xl ${index === 1 ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}
+                  speed={-0.1}
+                />
+
+                <span className="text-gold-dark font-medium tracking-[0.2em] uppercase text-[10px] lg:text-xs mb-2 block opacity-70">
+                  {service.tagline}
+                </span>
+                <h3 className="font-serif text-2xl lg:text-3xl mb-4">{service.title}</h3>
+                <p className="text-sm lg:text-base opacity-65 leading-relaxed mb-6">{service.description}</p>
+
+                <ul className="space-y-2.5">
+                  {service.inclusions.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm opacity-55">
+                      <span className="text-gold-dark mt-0.5 text-xs">●</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== OUR APPROACH ===== */}
+      <section className="py-section lg:py-desktop-section bg-deep-blue text-ivory relative">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-transparent" />
+
+        <div className="container mx-auto px-6 lg:px-12">
+          <div ref={useScrollReveal({ y: 40 })} className="text-center mb-16 lg:mb-24">
+            <span className="text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+              How We Work
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">
+              Our Approach to <span className="gradient-text-light">Design</span>
+            </h2>
+          </div>
+
+          {/* Row 1 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20 lg:mb-32">
+            <ParallaxImage
+              src={brandStudioWorkspace}
+              alt="Design Philosophy"
+              className="h-[350px] sm:h-[400px] lg:h-[500px] rounded-2xl"
+              speed={-0.15}
             />
-            <div className="absolute inset-0 bg-forest-green/75" />
-          </div>
 
-          <div className="container mx-auto px-6 lg:px-12 py-32 lg:py-44 text-warm-cream text-center">
-            <motion.span
-              className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-            >
-              What We Do
-            </motion.span>
-            <motion.h1
-              className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 max-w-4xl mx-auto"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.1 }}
-            >
-              Crafting Spaces That Inspire
-            </motion.h1>
-            <motion.p
-              className="text-base md:text-lg leading-relaxed opacity-80 max-w-2xl mx-auto"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.2 }}
-            >
-              From concept to final reveal, we offer a complete spectrum of interior design services
-              tailored to your lifestyle. Every project is a unique collaboration between vision,
-              craft, and the art of refined living.
-            </motion.p>
-          </div>
-        </section>
-
-        {/* ===== SERVICE CARDS ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12"
-          data-purpose="service-cards"
-          ref={serviceGrid.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="text-center mb-16 lg:mb-24"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={serviceGrid.inView ? 'visible' : 'hidden'}
-            >
-              <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                Our Expertise
+            <div ref={approachRow1} className="max-w-lg">
+              <span className="approach-item-1 text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+                Design Philosophy
               </span>
-              <h2 className="font-serif text-4xl md:text-5xl leading-tight max-w-2xl mx-auto">
-                Three Pillars of Exceptional Design
-              </h2>
-            </motion.div>
+              <h3 className="approach-item-1 font-serif text-3xl lg:text-4xl mb-6 leading-tight">
+                Rooted in Indian Craft, Refined by Modern Vision
+              </h3>
+              <p className="approach-item-1 text-base lg:text-lg opacity-80 leading-relaxed mb-6">
+                We believe great interiors emerge from a dialogue between heritage and modernity.
+                Our designs draw on India's rich traditions of craftsmanship — block printing,
+                stone carving, handloom weaving — and reinterpret them through a contemporary lens.
+              </p>
+              <p className="approach-item-1 text-sm opacity-55 leading-relaxed">
+                Sustainability is not an afterthought; it's woven into every material choice.
+                We prioritize locally sourced, low-impact materials and work with artisan
+                communities across India to bring authenticity and soul to every project.
+              </p>
+            </div>
+          </div>
 
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10"
-              variants={staggerContainer}
-              initial="hidden"
-              animate={serviceGrid.inView ? 'visible' : 'hidden'}
-            >
-              {services.map((service, index) => (
+          {/* Row 2 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div ref={approachRow2} className="max-w-lg order-2 lg:order-1">
+              <span className="approach-item-2 text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+                Client-First Process
+              </span>
+              <h3 className="approach-item-2 font-serif text-3xl lg:text-4xl mb-6 leading-tight">
+                Collaborative, Transparent, Tailored
+              </h3>
+              <p className="approach-item-2 text-base lg:text-lg opacity-80 leading-relaxed mb-6">
+                Every project begins with listening. We invest time understanding not just your
+                aesthetic preferences, but how you live, work, and entertain. The result is a
+                space that feels intuitively yours from the moment you step in.
+              </p>
+              <p className="approach-item-2 text-sm opacity-55 leading-relaxed">
+                Our process is completely transparent — from budgets to timelines. You'll have
+                a dedicated project manager, regular progress updates, and full visibility into
+                every decision. No surprises, just beautiful spaces delivered on time.
+              </p>
+            </div>
+
+            <div className="order-1 lg:order-2">
+              <ParallaxImage
+                src={detailSereneHaven1}
+                alt="Client-First Process"
+                className="h-[350px] sm:h-[400px] lg:h-[500px] rounded-2xl"
+                speed={-0.15}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PROCESS TIMELINE ===== */}
+      <section className="py-section lg:py-desktop-section bg-ivory">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div ref={useScrollReveal({ y: 40 })} className="text-center mb-16 lg:mb-24">
+            <span className="text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+              Our Process
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">
+              From Vision to <span className="gradient-text">Reality</span>
+            </h2>
+          </div>
+
+          <div className="relative">
+            <div className="hidden lg:block absolute top-14 left-0 w-full h-px border-t border-dashed border-deep-blue/15 -z-0" />
+
+            <div ref={processReveal} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-y-12 sm:gap-y-16 gap-x-6 lg:gap-8">
+              {processSteps.map((step) => (
                 <motion.div
-                  key={service.title}
-                  className="group"
-                  variants={staggerChild}
+                  key={step.num}
+                  className="process-step relative z-10 text-center bg-ivory px-2"
+                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 >
-                  {/* Image */}
                   <motion.div
-                    className={`overflow-hidden mb-6 lg:mb-8 rounded-xl ${
-                      index === 1 ? 'aspect-[3/4]' : 'aspect-[4/3]'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.4 }}
+                    className="w-20 lg:w-28 h-20 lg:h-28 mx-auto bg-deep-blue/[0.06] rounded-full flex items-center justify-center font-serif text-2xl lg:text-3xl mb-6 lg:mb-8 text-deep-blue border border-deep-blue/10"
+                    variants={glowPulseVariant}
+                    whileHover={{ scale: 1.15, rotate: 5 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
                   >
-                    <img
-                      alt={service.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      src={service.image}
-                    />
+                    {step.num}
                   </motion.div>
-
-                  {/* Content */}
-                  <motion.span
-                    className="text-soft-sage font-medium tracking-widest uppercase text-[10px] lg:text-xs mb-2 block"
-                    initial={{ opacity: 0 }}
-                    animate={serviceGrid.inView ? { opacity: 0.7 } : {}}
-                    transition={{ delay: 0.3 + index * 0.1 }}
-                  >
-                    {service.tagline}
-                  </motion.span>
-                  <motion.h3
-                    className="font-serif text-2xl lg:text-3xl mb-4"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={serviceGrid.inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.35 + index * 0.1 }}
-                  >
-                    {service.title}
-                  </motion.h3>
-                  <motion.p
-                    className="text-sm lg:text-base opacity-70 leading-relaxed mb-6"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={serviceGrid.inView ? { opacity: 0.7, y: 0 } : {}}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                  >
-                    {service.description}
-                  </motion.p>
-
-                  {/* Inclusions */}
-                  <ul className="space-y-2.5">
-                    {service.inclusions.map((item, i) => (
-                      <motion.li
-                        key={i}
-                        className="flex items-start gap-3 text-sm opacity-60"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={serviceGrid.inView ? { opacity: 0.6, x: 0 } : {}}
-                        transition={{ delay: 0.5 + index * 0.1 + i * 0.05 }}
-                      >
-                        <span className="text-soft-sage mt-0.5 text-xs">●</span>
-                        {item}
-                      </motion.li>
-                    ))}
-                  </ul>
+                  <h4 className="font-serif text-lg lg:text-xl mb-3">{step.title}</h4>
+                  <p className="text-xs lg:text-sm opacity-60 leading-relaxed max-w-[200px] mx-auto">{step.desc}</p>
                 </motion.div>
               ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ===== OUR APPROACH ===== */}
-        <section
-          className="py-section lg:py-desktop-section bg-forest-green text-warm-cream"
-          data-purpose="our-approach"
-          ref={approach.ref}
-        >
-          <div className="container mx-auto px-6 lg:px-12">
-            <motion.div
-              className="text-center mb-16 lg:mb-24"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={approach.inView ? 'visible' : 'hidden'}
-            >
-              <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                How We Work
-              </span>
-              <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-                Our Approach to Design
-              </h2>
-            </motion.div>
-
-            {/* Row 1: Image Left + Text Right */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20 lg:mb-32">
-              <motion.div
-                className="h-[350px] sm:h-[400px] lg:h-[500px] overflow-hidden rounded-xl"
-                variants={fadeLeftVariant}
-                initial="hidden"
-                animate={approach.inView ? 'visible' : 'hidden'}
-              >
-                <motion.img
-                  alt="Design Philosophy"
-                  className="w-full h-full object-cover"
-                  src={brandStudioWorkspace}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
-                />
-              </motion.div>
-
-              <motion.div
-                className="max-w-lg"
-                variants={fadeRightVariant}
-                initial="hidden"
-                animate={approach.inView ? 'visible' : 'hidden'}
-              >
-                <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block">
-                  Design Philosophy
-                </span>
-                <h3 className="font-serif text-3xl lg:text-4xl mb-6 leading-tight">
-                  Rooted in Indian Craft, Refined by Modern Vision
-                </h3>
-                <p className="text-base lg:text-lg opacity-80 leading-relaxed mb-6">
-                  We believe great interiors emerge from a dialogue between heritage and modernity.
-                  Our designs draw on India's rich traditions of craftsmanship — block printing,
-                  stone carving, handloom weaving — and reinterpret them through a contemporary lens.
-                </p>
-                <p className="text-sm opacity-60 leading-relaxed">
-                  Sustainability is not an afterthought; it's woven into every material choice.
-                  We prioritize locally sourced, low-impact materials and work with artisan
-                  communities across India to bring authenticity and soul to every project.
-                </p>
-              </motion.div>
-            </div>
-
-            {/* Row 2: Text Left + Image Right */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              <motion.div
-                className="max-w-lg order-2 lg:order-1"
-                variants={fadeLeftVariant}
-                initial="hidden"
-                animate={approach.inView ? 'visible' : 'hidden'}
-                transition={{ delay: 0.2 }}
-              >
-                <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block">
-                  Client-First Process
-                </span>
-                <h3 className="font-serif text-3xl lg:text-4xl mb-6 leading-tight">
-                  Collaborative, Transparent, Tailored
-                </h3>
-                <p className="text-base lg:text-lg opacity-80 leading-relaxed mb-6">
-                  Every project begins with listening. We invest time understanding not just your
-                  aesthetic preferences, but how you live, work, and entertain. The result is a
-                  space that feels intuitively yours from the moment you step in.
-                </p>
-                <p className="text-sm opacity-60 leading-relaxed">
-                  Our process is completely transparent — from budgets to timelines. You'll have
-                  a dedicated project manager, regular progress updates, and full visibility into
-                  every decision. No surprises, just beautiful spaces delivered on time.
-                </p>
-              </motion.div>
-
-              <motion.div
-                className="h-[350px] sm:h-[400px] lg:h-[500px] overflow-hidden rounded-xl order-1 lg:order-2"
-                variants={fadeRightVariant}
-                initial="hidden"
-                animate={approach.inView ? 'visible' : 'hidden'}
-                transition={{ delay: 0.2 }}
-              >
-                <motion.img
-                  alt="Client-First Process"
-                  className="w-full h-full object-cover"
-                  src={detailSereneHaven1}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
-                />
-              </motion.div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ===== PROCESS TIMELINE ===== */}
-        <section
-          className="py-section lg:py-desktop-section bg-warm-cream"
-          data-purpose="process-timeline"
-          ref={process.ref}
-        >
-          <div className="container mx-auto px-6 lg:px-12">
-            <motion.div
-              className="text-center mb-16 lg:mb-24"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={process.inView ? 'visible' : 'hidden'}
-            >
-              <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                Our Process
-              </span>
-              <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-                From Vision to Reality in Five Steps
-              </h2>
-            </motion.div>
-
-            <div className="relative">
-              {/* Connector Line — Desktop Only */}
-              <div className="hidden lg:block absolute top-12 left-0 w-full h-px border-t border-dashed border-forest-green/20 -z-0" />
-
-              <motion.div
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-y-12 sm:gap-y-16 gap-x-6 lg:gap-8"
-                variants={staggerContainer}
-                initial="hidden"
-                animate={process.inView ? 'visible' : 'hidden'}
-              >
-                {processSteps.map((step) => (
-                  <motion.div
-                    key={step.num}
-                    className="relative z-10 text-center bg-warm-cream px-2"
-                    variants={staggerChild}
-                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                  >
-                    <motion.div
-                      className="w-20 lg:w-24 h-20 lg:h-24 mx-auto bg-soft-sage/30 rounded-full flex items-center justify-center font-serif text-2xl lg:text-3xl mb-6 lg:mb-8"
-                      whileHover={{ scale: 1.15, rotate: 5 }}
-                      transition={{ type: 'spring', stiffness: 300 }}
-                    >
-                      {step.num}
-                    </motion.div>
-                    <h4 className="font-serif text-lg lg:text-xl mb-3">{step.title}</h4>
-                    <p className="text-xs lg:text-sm opacity-70 leading-relaxed max-w-[200px] mx-auto">
-                      {step.desc}
-                    </p>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== WHY CHOOSE US (STATS) ===== */}
-        <section
-          className="py-16 lg:py-20 border-y border-forest-green/10"
-          data-purpose="stats"
-          ref={stats.ref}
-        >
-          <div className="container mx-auto px-6 lg:px-12">
-            <motion.div
-              className="grid grid-cols-2 sm:grid-cols-4 gap-8 lg:gap-12"
-              variants={staggerContainer}
-              initial="hidden"
-              animate={stats.inView ? 'visible' : 'hidden'}
-            >
-              {[
-                { value: '150+', label: 'Projects Delivered' },
-                { value: '12+', label: 'Years Experience' },
-                { value: '98%', label: 'Client Satisfaction' },
-                { value: '40+', label: 'Design Awards' },
-              ].map((stat) => (
-                <motion.div
-                  key={stat.label}
-                  className="text-center"
-                  variants={staggerChild}
-                  whileHover={{ scale: 1.08, transition: { duration: 0.3 } }}
+      {/* ===== STATS ===== */}
+      <section className="py-16 lg:py-20 bg-deep-blue text-ivory relative" ref={stats.ref}>
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-transparent" />
+        <div className="container mx-auto px-6 lg:px-12">
+          <motion.div
+            className="grid grid-cols-2 sm:grid-cols-4 gap-8 lg:gap-12"
+            variants={staggerContainer}
+            initial="hidden"
+            animate={stats.inView ? 'visible' : 'hidden'}
+          >
+            {[
+              { value: '150+', label: 'Projects Delivered' },
+              { value: '12+', label: 'Years Experience' },
+              { value: '98%', label: 'Client Satisfaction' },
+              { value: '40+', label: 'Design Awards' },
+            ].map((stat) => (
+              <motion.div key={stat.label} className="text-center" variants={staggerChild} whileHover={{ scale: 1.08, transition: { duration: 0.3 } }}>
+                <motion.span
+                  className="block font-serif text-4xl lg:text-5xl mb-2 text-warm-gold"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={stats.inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ type: 'spring', stiffness: 200 }}
                 >
-                  <motion.span
-                    className="block font-serif text-4xl lg:text-5xl mb-2"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={stats.inView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ type: 'spring', stiffness: 200 }}
-                  >
-                    {stat.value}
-                  </motion.span>
-                  <span className="text-[10px] lg:text-xs uppercase tracking-widest opacity-50 font-medium">
-                    {stat.label}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
+                  {stat.value}
+                </motion.span>
+                <span className="text-[10px] lg:text-xs uppercase tracking-[0.2em] opacity-45 font-medium">{stat.label}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-transparent" />
+      </section>
+
+      {/* ===== TESTIMONIALS ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12 overflow-hidden" ref={testimonialsSection.ref}>
+        <div className="container mx-auto">
+          <div ref={useScrollReveal({ y: 40 })} className="text-center mb-14 lg:mb-20">
+            <span className="text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+              Client Stories
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">
+              Words from Those We've <span className="gradient-text">Designed</span> For
+            </h2>
           </div>
-        </section>
 
-        {/* ===== TESTIMONIALS ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12 overflow-hidden"
-          data-purpose="testimonials"
-          ref={testimonialsSection.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="text-center mb-16 lg:mb-20"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={testimonialsSection.inView ? 'visible' : 'hidden'}
-            >
-              <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                Client Stories
-              </span>
-              <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-                Words from Those We've Designed For
-              </h2>
-            </motion.div>
-
-            <motion.div
-              className="testimonial-container gap-6 lg:gap-8"
-              variants={staggerContainer}
-              initial="hidden"
-              animate={testimonialsSection.inView ? 'visible' : 'hidden'}
-            >
-              {testimonials.map((t, i) => (
-                <motion.div
-                  key={i}
-                  className="testimonial-card bg-white p-8 md:p-10 lg:p-12 shadow-sm border border-forest-green/5 rounded-xl flex-shrink-0"
-                  variants={staggerChild}
-                  whileHover={{
-                    y: -6,
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
-                    transition: { duration: 0.3 },
-                  }}
-                >
-                  <motion.div
-                    className="text-yellow-500 mb-6 text-sm lg:text-base"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={testimonialsSection.inView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ delay: 0.3 + i * 0.15, type: 'spring', stiffness: 200 }}
-                  >
-                    ★★★★★
-                  </motion.div>
-                  <p className="text-base lg:text-lg italic mb-8 lg:mb-10 leading-relaxed opacity-80">
-                    {t.quote}
-                  </p>
-                  <div>
-                    <p className="font-serif text-lg font-medium">{t.name}</p>
-                    <p className="text-xs uppercase tracking-widest opacity-50 mt-1">{t.location}</p>
+          <motion.div
+            className="testimonial-container gap-6 lg:gap-8"
+            variants={staggerContainer}
+            initial="hidden"
+            animate={testimonialsSection.inView ? 'visible' : 'hidden'}
+          >
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={i}
+                className="testimonial-card bg-white p-8 md:p-10 lg:p-14 shadow-sm border border-deep-blue/5 rounded-2xl flex-shrink-0"
+                variants={staggerChild}
+                whileHover={{ y: -8, boxShadow: '0 25px 50px rgba(38, 64, 83, 0.08)', transition: { duration: 0.3 } }}
+              >
+                <div className="text-gold-dark mb-6 text-base lg:text-lg tracking-wider">★★★★★</div>
+                <p className="text-base lg:text-lg italic mb-10 leading-relaxed opacity-75 font-serif">{t.quote}</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-deep-blue/[0.06] flex items-center justify-center font-serif text-lg text-deep-blue">
+                    {t.name.charAt(0)}
                   </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ===== CTA BANNER ===== */}
-        <section
-          className="pb-section lg:pb-desktop-section px-6 lg:px-12"
-          data-purpose="services-cta"
-          ref={cta.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="bg-forest-green text-warm-cream rounded-3xl p-12 md:p-20 lg:p-24 text-center"
-              variants={scalePopVariant}
-              initial="hidden"
-              animate={cta.inView ? 'visible' : 'hidden'}
-            >
-              <motion.span
-                className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={cta.inView ? 'visible' : 'hidden'}
-              >
-                Get Started
-              </motion.span>
-              <motion.h2
-                className="font-serif text-4xl md:text-5xl lg:text-6xl mb-6"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={cta.inView ? 'visible' : 'hidden'}
-                transition={{ delay: 0.1 }}
-              >
-                Ready to Transform Your Space?
-              </motion.h2>
-              <motion.p
-                className="text-base md:text-lg opacity-80 mb-10 max-w-2xl mx-auto leading-relaxed"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={cta.inView ? 'visible' : 'hidden'}
-                transition={{ delay: 0.2 }}
-              >
-                Whether you're dreaming of a serene bedroom retreat, a show-stopping living room,
-                or a workspace that sparks creativity — let's talk. Your first consultation is on us.
-              </motion.p>
-              <motion.div
-                className="flex flex-col sm:flex-row justify-center items-center gap-4 lg:gap-6"
-                variants={fadeUpVariant}
-                initial="hidden"
-                animate={cta.inView ? 'visible' : 'hidden'}
-                transition={{ delay: 0.3 }}
-              >
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link
-                    className="bg-warm-cream text-forest-green px-8 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity w-full sm:w-auto inline-block text-center"
-                    to="/contact"
-                  >
-                    Book a Free Consultation
-                  </Link>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link
-                    className="border border-warm-cream/40 text-warm-cream px-8 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:bg-warm-cream/10 transition-all w-full sm:w-auto inline-block text-center"
-                    to="/projects"
-                  >
-                    View Our Projects
-                  </Link>
-                </motion.div>
+                  <div>
+                    <p className="font-medium text-sm lg:text-base">{t.name}</p>
+                    <p className="text-[10px] lg:text-xs uppercase tracking-[0.15em] opacity-45">{t.location}</p>
+                  </div>
+                </div>
               </motion.div>
-            </motion.div>
-          </div>
-        </section>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ===== CTA ===== */}
+      <section className="pb-section lg:pb-desktop-section px-6 lg:px-12" ref={cta.ref}>
+        <div className="container mx-auto">
+          <motion.div
+            className="bg-gradient-to-br from-deep-blue via-deep-blue to-[#1a2f3d] text-ivory rounded-3xl p-12 md:p-20 lg:p-28 text-center relative overflow-hidden"
+            initial={{ opacity: 0, y: 60, scale: 0.95 }}
+            animate={cta.inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.div className="absolute -top-20 -right-20 w-64 h-64 border border-warm-gold/10 rounded-full" animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }} />
+            <motion.div className="absolute -bottom-32 -left-32 w-96 h-96 border border-warm-gold/10 rounded-full" animate={{ rotate: -360 }} transition={{ duration: 45, repeat: Infinity, ease: 'linear' }} />
+
+            <div className="relative z-10">
+              <h2 className="font-serif text-4xl md:text-5xl lg:text-7xl mb-6 leading-[1.1]">
+                Ready to Transform Your <span className="gradient-text-light">Space</span>?
+              </h2>
+              <p className="text-base md:text-lg opacity-70 mb-12 max-w-xl mx-auto leading-relaxed">
+                Whether you're dreaming of a serene bedroom retreat, a show-stopping living room,
+                or a workspace that sparks creativity — let's talk.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
+                <MagneticButton as="a" href="/contact" className="bg-warm-gold text-deep-blue px-10 lg:px-14 py-4 lg:py-5 rounded-full text-sm font-semibold hover:shadow-[0_8px_30px_rgba(248,217,132,0.4)] transition-shadow">
+                  Book a Free Consultation
+                </MagneticButton>
+                <MagneticButton as="a" href="/projects" className="border border-ivory/25 text-ivory px-10 lg:px-14 py-4 lg:py-5 rounded-full text-sm font-medium hover:bg-ivory/8 transition-all">
+                  View Our Projects
+                </MagneticButton>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </PageLayout>
   )
 }

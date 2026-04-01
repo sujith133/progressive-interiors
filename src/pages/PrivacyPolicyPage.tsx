@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import PageLayout from '../components/PageLayout'
-import { fadeUpVariant, useSectionInView } from '../utils/animations'
+import { fadeUpVariant, textRevealVariant, useSectionInView } from '../utils/animations'
 
 const PrivacyPolicyPage = () => {
   const hero = useSectionInView(0.15)
@@ -10,12 +10,16 @@ const PrivacyPolicyPage = () => {
     <PageLayout>
       {/* Hero */}
       <section
-        className="bg-forest-green text-warm-cream py-24 lg:py-32 px-6 lg:px-12"
+        className="bg-deep-blue text-ivory py-24 lg:py-32 px-6 lg:px-12 relative overflow-hidden"
         ref={hero.ref}
       >
+        {/* Floating gold particles */}
+        <div className="absolute top-20 left-[15%] gold-particle" />
+        <div className="absolute top-40 right-[20%] gold-particle" />
+
         <div className="container mx-auto text-center">
           <motion.span
-            className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
+            className="text-warm-gold font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
             variants={fadeUpVariant}
             initial="hidden"
             animate={hero.inView ? 'visible' : 'hidden'}
@@ -24,7 +28,7 @@ const PrivacyPolicyPage = () => {
           </motion.span>
           <motion.h1
             className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.1]"
-            variants={fadeUpVariant}
+            variants={textRevealVariant}
             initial="hidden"
             animate={hero.inView ? 'visible' : 'hidden'}
             transition={{ delay: 0.1 }}
@@ -63,7 +67,7 @@ const PrivacyPolicyPage = () => {
             <li><strong>Personal Information:</strong> Name, email address, phone number, and postal address provided through our contact form or during consultations.</li>
             <li><strong>Project Details:</strong> Information about your property, design preferences, budget range, and project requirements shared during our discovery sessions.</li>
             <li><strong>Usage Data:</strong> Information about how you interact with our website, including pages visited, time spent, browser type, and referring URLs.</li>
-            <li><strong>Cookies & Analytics:</strong> We use cookies and similar tracking technologies to improve your browsing experience and analyse site traffic.</li>
+            <li><strong>Cookies &amp; Analytics:</strong> We use cookies and similar tracking technologies to improve your browsing experience and analyse site traffic.</li>
           </ul>
 
           <h2 className="font-serif text-2xl lg:text-3xl mb-4">3. How We Use Your Information</h2>
@@ -75,7 +79,7 @@ const PrivacyPolicyPage = () => {
             <li>To send promotional content or newsletters (only with your explicit consent; you may opt out at any time).</li>
           </ul>
 
-          <h2 className="font-serif text-2xl lg:text-3xl mb-4">4. Data Sharing & Disclosure</h2>
+          <h2 className="font-serif text-2xl lg:text-3xl mb-4">4. Data Sharing &amp; Disclosure</h2>
           <p className="text-sm lg:text-base opacity-80 leading-relaxed mb-4">
             We do not sell, trade, or rent your personal information. We may share information with:
           </p>
@@ -126,7 +130,7 @@ const PrivacyPolicyPage = () => {
           <p className="text-sm lg:text-base opacity-80 leading-relaxed mb-2">
             If you have any questions about this Privacy Policy, please contact us at:
           </p>
-          <div className="bg-forest-green/[0.03] border border-forest-green/10 rounded-xl p-6 text-sm opacity-80 leading-relaxed">
+          <div className="bg-deep-blue/[0.03] border border-deep-blue/10 rounded-xl p-6 text-sm opacity-80 leading-relaxed">
             <p><strong>Progressive Interiors</strong></p>
             <p>2nd Floor, Brindavan Colony, A. S. Rao Nagar, Hyderabad, Telangana 500062</p>
             <p>Email: hello@progressiveinteriors.in</p>

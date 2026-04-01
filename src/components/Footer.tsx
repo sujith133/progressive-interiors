@@ -54,11 +54,18 @@ const Footer = () => {
 
   return (
     <footer
-      className="bg-warm-cream border-t border-forest-green/10 pt-16 lg:pt-24 pb-10 lg:pb-12 px-6 lg:px-12"
+      className="bg-deep-blue text-ivory pt-16 lg:pt-24 pb-10 lg:pb-12 px-6 lg:px-12 relative overflow-hidden"
       data-purpose="main-footer"
       ref={footer.ref}
     >
-      <div className="container mx-auto">
+      {/* Decorative gold accent line at top */}
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-warm-gold to-transparent opacity-60" />
+
+      {/* Floating decorative elements */}
+      <div className="absolute top-20 right-10 w-64 h-64 rounded-full border border-ivory/[0.03] -z-0" />
+      <div className="absolute bottom-10 left-20 w-40 h-40 rounded-full border border-warm-gold/[0.05] -z-0" />
+
+      <div className="container mx-auto relative z-10">
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-12 lg:gap-y-0 mb-16 lg:mb-20"
           variants={staggerContainer}
@@ -72,7 +79,7 @@ const Footer = () => {
                 className="mb-6 lg:mb-8 block"
                 to="/"
               >
-                <img src="/logo.png" alt="Progressive Interiors" className="h-14 lg:h-16 w-auto" />
+                <img src="/logo.png" alt="Progressive Interiors" className="h-14 lg:h-16 w-auto brightness-0 invert" />
               </Link>
             </motion.div>
             <p className="opacity-60 text-xs lg:text-sm leading-relaxed max-w-xs mb-6">
@@ -81,23 +88,25 @@ const Footer = () => {
             </p>
             <div className="flex gap-3">
               {socialLinks.map((s) => (
-                <a
+                <motion.a
                   key={s.label}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 bg-forest-green/[0.06] hover:bg-forest-green hover:text-warm-cream rounded-full flex items-center justify-center transition-all duration-300 text-forest-green"
+                  className="w-9 h-9 bg-ivory/[0.08] hover:bg-warm-gold hover:text-deep-blue rounded-full flex items-center justify-center transition-all duration-300 text-ivory"
+                  whileHover={{ scale: 1.15, rotate: 5 }}
+                  whileTap={{ scale: 0.95 }}
                   aria-label={s.label}
                 >
                   {s.icon}
-                </a>
+                </motion.a>
               ))}
             </div>
           </motion.div>
 
           {/* Navigation */}
           <motion.div variants={staggerChild}>
-            <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8">
+            <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8 text-warm-gold">
               Navigation
             </h5>
             <ul className="space-y-3 lg:space-y-4 text-xs lg:text-sm opacity-80">
@@ -109,7 +118,7 @@ const Footer = () => {
               ].map((item) => (
                 <li key={item.label}>
                   <motion.div whileHover={{ x: 4 }}>
-                    <Link className="hover:opacity-100 transition-opacity" to={item.to}>
+                    <Link className="hover:text-warm-gold transition-colors" to={item.to}>
                       {item.label}
                     </Link>
                   </motion.div>
@@ -120,7 +129,7 @@ const Footer = () => {
 
           {/* Contact */}
           <motion.div variants={staggerChild}>
-            <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8">
+            <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8 text-warm-gold">
               Contact
             </h5>
             <ul className="space-y-3 lg:space-y-4 text-xs lg:text-sm opacity-80">
@@ -136,20 +145,20 @@ const Footer = () => {
 
           {/* Legal */}
           <motion.div variants={staggerChild}>
-            <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8">
+            <h5 className="uppercase tracking-widest text-[10px] lg:text-xs font-bold mb-6 lg:mb-8 text-warm-gold">
               Legal
             </h5>
             <ul className="space-y-3 lg:space-y-4 text-xs lg:text-sm opacity-80">
               <li>
                 <motion.div whileHover={{ x: 4 }}>
-                  <Link className="hover:opacity-100 transition-opacity" to="/privacy-policy">
+                  <Link className="hover:text-warm-gold transition-colors" to="/privacy-policy">
                     Privacy Policy
                   </Link>
                 </motion.div>
               </li>
               <li>
                 <motion.div whileHover={{ x: 4 }}>
-                  <Link className="hover:opacity-100 transition-opacity" to="/terms-and-conditions">
+                  <Link className="hover:text-warm-gold transition-colors" to="/terms-and-conditions">
                     Terms &amp; Conditions
                   </Link>
                 </motion.div>
@@ -159,7 +168,7 @@ const Footer = () => {
         </motion.div>
 
         <motion.div
-          className="flex flex-col sm:flex-row justify-between items-center pt-10 lg:pt-12 border-t border-forest-green/5 opacity-40 text-[9px] lg:text-[10px] uppercase tracking-[0.2em]"
+          className="flex flex-col sm:flex-row justify-between items-center pt-10 lg:pt-12 border-t border-ivory/10 opacity-40 text-[9px] lg:text-[10px] uppercase tracking-[0.2em]"
           variants={fadeLeftVariant}
           initial="hidden"
           animate={footer.inView ? 'visible' : 'hidden'}

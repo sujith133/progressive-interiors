@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
+import CustomCursor from './components/CustomCursor'
 import HomePage from './pages/HomePage'
 import ProjectsPage from './pages/ProjectsPage'
 import ProjectDetailPage from './pages/ProjectDetailPage'
@@ -12,6 +13,7 @@ import TermsPage from './pages/TermsPage'
 function App() {
   return (
     <>
+      <CustomCursor />
       <ScrollToTop />
       <Routes>
       <Route path="/" element={<HomePage />} />
@@ -28,5 +30,3 @@ function App() {
 }
 
 export default App
-
-

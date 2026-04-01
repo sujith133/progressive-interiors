@@ -1,20 +1,23 @@
+import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PageLayout from '../components/PageLayout'
+import ParallaxImage from '../components/ParallaxImage'
+import MagneticButton from '../components/MagneticButton'
+import { useScrollReveal } from '../hooks/useGSAP'
 import {
-  fadeUpVariant,
-  fadeLeftVariant,
-  fadeRightVariant,
-  scalePopVariant,
   staggerContainer,
   staggerChild,
+  glowPulseVariant,
   useSectionInView,
 } from '../utils/animations'
 import brandStudioWorkspace from '../assets/images/brand-studio-workspace.webp'
 import detailSereneHaven1 from '../assets/images/detail-serene-haven-1.webp'
 import detailSereneHaven2 from '../assets/images/detail-serene-haven-2.webp'
 
-
+gsap.registerPlugin(ScrollTrigger)
 
 /* ────────────────────────────────────────────
    Team data
@@ -26,7 +29,7 @@ const team = [
     initials: 'SC',
     experience: '15 Years',
     bio: 'Recognized for strong leadership and client-centric collaboration, Syam Chopra thrives in dynamic environments, working closely with architects, contractors, and stakeholders to achieve outstanding results. Whether designing luxury homes, corporate offices, or hospitality spaces, he brings a strategic approach, sharp attention to detail, and a passion for elevating built environments. He has successfully managed end-to-end projects, from conceptual design and space planning to execution and final handover.',
-    gradient: 'from-forest-green to-forest-green/70',
+    gradient: 'from-deep-blue to-deep-blue/70',
   },
   {
     name: 'E. Hanock Moses',
@@ -34,7 +37,7 @@ const team = [
     initials: 'HM',
     experience: '8 Years',
     bio: 'With 8 years of hands-on experience in interior design and construction, E. Hanock Moses is a seasoned professional known for blending creativity with technical precision to deliver exceptional spaces. Specializing in residential, commercial, and retail projects, he has a proven track record of transforming client visions into reality through innovative design, meticulous planning, and flawless execution.',
-    gradient: 'from-soft-sage to-soft-sage/60',
+    gradient: 'from-warm-gold/80 to-warm-gold/40',
   },
   {
     name: 'Bh. Pavan Kumar',
@@ -42,7 +45,7 @@ const team = [
     initials: 'PK',
     experience: '10+ Years',
     bio: 'Bh. Pavan Kumar is an effective team leader and communicator, adept at coordinating between architects, engineers, vendors, and clients to maintain smooth project workflows. Known for his attention to detail, strong work ethic, and commitment to client satisfaction, he has built a reputation for delivering projects on time, within budget, and above expectations. He stays updated with the latest trends in materials, technology, and sustainable building practices, ensuring each project reflects current standards and long-term durability.',
-    gradient: 'from-forest-green/80 to-soft-sage/40',
+    gradient: 'from-deep-blue/80 to-warm-gold/30',
   },
 ]
 
@@ -70,481 +73,380 @@ const values = [
 ]
 
 /* ════════════════════════════════════════════
-   AboutPage Component
+   AboutPage Component — GSAP Enhanced
    ════════════════════════════════════════════ */
 const AboutPage = () => {
+  // GSAP hero animation
+  const heroTitleRef = useRef<HTMLHeadingElement>(null)
+  const heroTagRef = useRef<HTMLSpanElement>(null)
+  const heroSubRef = useRef<HTMLParagraphElement>(null)
 
-  // Section refs
-  const hero = useSectionInView(0.15)
-  const story = useSectionInView(0.15)
-  const mission = useSectionInView(0.15)
-  const valuesSection = useSectionInView(0.1)
-  const teamSection = useSectionInView(0.1)
+  const storyReveal = useScrollReveal({ y: 60, stagger: 0.12, childSelector: '.story-item' })
+  const missionReveal = useScrollReveal({ y: 60, stagger: 0.12, childSelector: '.mission-item' })
+  const valuesReveal = useScrollReveal({ y: 50, stagger: 0.15, childSelector: '.value-card' })
+  const teamReveal = useScrollReveal({ y: 60, stagger: 0.2, childSelector: '.team-member' })
+
   const stats = useSectionInView(0.25)
   const cta = useSectionInView(0.25)
 
+  // Hero entrance
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+    tl.set([heroTagRef.current, heroTitleRef.current, heroSubRef.current], {
+      opacity: 0,
+      y: 60,
+    })
+
+    tl.to(heroTagRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.3)
+      .to(heroTitleRef.current, { opacity: 1, y: 0, duration: 1 }, 0.5)
+      .to(heroSubRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.8)
+
+    return () => { tl.kill() }
+  }, [])
+
   return (
     <PageLayout>
-        {/* ===== HERO SECTION ===== */}
-        <section
-          className="relative bg-forest-green text-warm-cream overflow-hidden"
-          data-purpose="about-hero"
-          ref={hero.ref}
-        >
-          {/* Subtle dot grid pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
-                backgroundSize: '40px 40px',
-              }}
+      {/* ===== HERO SECTION ===== */}
+      <section className="relative bg-deep-blue text-ivory overflow-hidden">
+        {/* Dot grid */}
+        <div className="absolute inset-0 opacity-5">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
+              backgroundSize: '40px 40px',
+            }}
+          />
+        </div>
+
+        {/* Floating gold particles */}
+        <div className="absolute top-20 left-[15%] gold-particle" />
+        <div className="absolute top-40 right-[20%] gold-particle" />
+        <div className="absolute bottom-20 left-[40%] gold-particle" />
+
+        <div className="container mx-auto px-6 lg:px-12 py-32 lg:py-44 text-center relative z-10">
+          <span
+            ref={heroTagRef}
+            className="text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-6 block"
+          >
+            About Us
+          </span>
+          <h1
+            ref={heroTitleRef}
+            className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] mb-8 max-w-4xl mx-auto"
+          >
+            Designing Spaces, Building <span className="gradient-text-light">Stories</span>
+          </h1>
+          <p
+            ref={heroSubRef}
+            className="text-base md:text-lg leading-relaxed opacity-75 max-w-2xl mx-auto"
+          >
+            Progressive Interiors is a Hyderabad-based design studio that transforms ordinary
+            spaces into extraordinary experiences. With over 15 years of combined expertise,
+            we bring vision, craft, and heart to every project.
+          </p>
+        </div>
+      </section>
+
+      {/* ===== OUR STORY ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <ParallaxImage
+              src={brandStudioWorkspace}
+              alt="Our Studio"
+              className="h-[350px] sm:h-[420px] lg:h-[550px] rounded-2xl"
+              speed={-0.15}
             />
-          </div>
 
-          <div className="container mx-auto px-6 lg:px-12 py-28 lg:py-40 text-center relative z-10">
-            <motion.span
-              className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-            >
-              About Us
-            </motion.span>
-            <motion.h1
-              className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 max-w-4xl mx-auto"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.1 }}
-            >
-              Designing Spaces, Building Stories
-            </motion.h1>
-            <motion.p
-              className="text-base md:text-lg leading-relaxed opacity-80 max-w-2xl mx-auto"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={hero.inView ? 'visible' : 'hidden'}
-              transition={{ delay: 0.2 }}
-            >
-              Progressive Interiors is a Hyderabad-based design studio that transforms ordinary
-              spaces into extraordinary experiences. With over 15 years of combined expertise,
-              we bring vision, craft, and heart to every project.
-            </motion.p>
-          </div>
-        </section>
-
-        {/* ===== OUR STORY ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12"
-          data-purpose="our-story"
-          ref={story.ref}
-        >
-          <div className="container mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              <motion.div
-                className="h-[350px] sm:h-[420px] lg:h-[550px] overflow-hidden rounded-xl"
-                variants={fadeLeftVariant}
-                initial="hidden"
-                animate={story.inView ? 'visible' : 'hidden'}
-              >
-                <motion.img
-                  alt="Our Studio"
-                  className="w-full h-full object-cover"
-                  src={brandStudioWorkspace}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
-                />
-              </motion.div>
-
-              <motion.div
-                className="max-w-lg"
-                variants={fadeRightVariant}
-                initial="hidden"
-                animate={story.inView ? 'visible' : 'hidden'}
-              >
-                <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block">
-                  Our Story
-                </span>
-                <h2 className="font-serif text-3xl lg:text-5xl mb-6 leading-tight">
-                  Born from a Passion for Purposeful Design
-                </h2>
-                <p className="text-base lg:text-lg opacity-80 leading-relaxed mb-6">
-                  Progressive Interiors was founded with a simple belief — that every space has the
-                  potential to inspire. From our studio in Hyderabad, we've grown into a team of
-                  designers, planners, and craftsmen who share a deep commitment to quality and
-                  client satisfaction.
-                </p>
-                <p className="text-sm opacity-60 leading-relaxed mb-8">
-                  What started as a small residential design practice has evolved into a
-                  full-service interior design studio serving clients across India. From luxury
-                  homes and modern apartments to corporate offices and retail spaces, we bring the
-                  same passion and precision to every project — no matter the scale.
-                </p>
-                <div className="flex gap-12">
-                  <div>
-                    <span className="block font-serif text-3xl lg:text-4xl mb-1">150+</span>
-                    <span className="text-[10px] lg:text-xs uppercase tracking-widest opacity-50 font-medium">
-                      Projects
-                    </span>
-                  </div>
-                  <div>
-                    <span className="block font-serif text-3xl lg:text-4xl mb-1">15+</span>
-                    <span className="text-[10px] lg:text-xs uppercase tracking-widest opacity-50 font-medium">
-                      Years
-                    </span>
-                  </div>
-                  <div>
-                    <span className="block font-serif text-3xl lg:text-4xl mb-1">98%</span>
-                    <span className="text-[10px] lg:text-xs uppercase tracking-widest opacity-50 font-medium">
-                      Satisfaction
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== MISSION & VISION ===== */}
-        <section
-          className="py-section lg:py-desktop-section bg-forest-green text-warm-cream px-6 lg:px-12"
-          data-purpose="mission-vision"
-          ref={mission.ref}
-        >
-          <div className="container mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              <motion.div
-                className="max-w-lg order-2 lg:order-1"
-                variants={fadeLeftVariant}
-                initial="hidden"
-                animate={mission.inView ? 'visible' : 'hidden'}
-              >
-                <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block">
-                  Our Mission
-                </span>
-                <h2 className="font-serif text-3xl lg:text-5xl mb-6 leading-tight">
-                  Elevating Everyday Living Through Thoughtful Design
-                </h2>
-                <p className="text-base lg:text-lg opacity-80 leading-relaxed mb-8">
-                  We believe that great design isn't just about aesthetics — it's about how a space
-                  makes you feel. Our mission is to create interiors that are not only visually
-                  stunning but also deeply functional, sustainable, and reflective of the people
-                  who inhabit them.
-                </p>
-
-                <div className="space-y-6">
-                  <div className="flex gap-4 items-start">
-                    <div className="w-10 h-10 bg-soft-sage/20 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-lg">
-                      ✦
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-sm mb-1">Vision</h4>
-                      <p className="text-sm opacity-60 leading-relaxed">
-                        To be India's most trusted interior design studio, known for creating
-                        spaces that inspire, endure, and tell authentic stories.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex gap-4 items-start">
-                    <div className="w-10 h-10 bg-soft-sage/20 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-lg">
-                      ✦
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-sm mb-1">Promise</h4>
-                      <p className="text-sm opacity-60 leading-relaxed">
-                        Transparent pricing, on-time delivery, and a collaborative process that
-                        puts your comfort and satisfaction first.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="h-[350px] sm:h-[420px] lg:h-[550px] overflow-hidden rounded-xl order-1 lg:order-2"
-                variants={fadeRightVariant}
-                initial="hidden"
-                animate={mission.inView ? 'visible' : 'hidden'}
-              >
-                <motion.img
-                  alt="Our Mission"
-                  className="w-full h-full object-cover"
-                  src={detailSereneHaven1}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
-                />
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CORE VALUES ===== */}
-        <section
-          className="py-section lg:py-desktop-section bg-warm-cream px-6 lg:px-12"
-          data-purpose="core-values"
-          ref={valuesSection.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="text-center mb-16 lg:mb-24"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={valuesSection.inView ? 'visible' : 'hidden'}
-            >
-              <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                What We Stand For
+            <div ref={storyReveal}>
+              <span className="story-item text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+                Our Story
               </span>
-              <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-                Our Core Values
+              <h2 className="story-item font-serif text-3xl lg:text-5xl mb-6 leading-tight">
+                Born from a Passion for Purposeful Design
               </h2>
-            </motion.div>
+              <p className="story-item text-base lg:text-lg opacity-75 leading-relaxed mb-6">
+                Progressive Interiors was founded with a simple belief — that every space has the
+                potential to inspire. From our studio in Hyderabad, we've grown into a team of
+                designers, planners, and craftsmen who share a deep commitment to quality and
+                client satisfaction.
+              </p>
+              <p className="story-item text-sm opacity-55 leading-relaxed mb-8">
+                What started as a small residential design practice has evolved into a
+                full-service interior design studio serving clients across India. From luxury
+                homes and modern apartments to corporate offices and retail spaces, we bring the
+                same passion and precision to every project — no matter the scale.
+              </p>
+              <div className="story-item flex gap-12">
+                <div>
+                  <span className="block font-serif text-3xl lg:text-4xl mb-1 text-gold-dark">150+</span>
+                  <span className="text-[10px] lg:text-xs uppercase tracking-[0.15em] opacity-45 font-medium">Projects</span>
+                </div>
+                <div>
+                  <span className="block font-serif text-3xl lg:text-4xl mb-1 text-gold-dark">15+</span>
+                  <span className="text-[10px] lg:text-xs uppercase tracking-[0.15em] opacity-45 font-medium">Years</span>
+                </div>
+                <div>
+                  <span className="block font-serif text-3xl lg:text-4xl mb-1 text-gold-dark">98%</span>
+                  <span className="text-[10px] lg:text-xs uppercase tracking-[0.15em] opacity-45 font-medium">Satisfaction</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="relative">
-              {/* Connector line — desktop */}
-              <div className="hidden lg:block absolute top-12 left-0 w-full h-px border-t border-dashed border-forest-green/20 -z-0" />
+      {/* ===== MISSION & VISION ===== */}
+      <section className="py-section lg:py-desktop-section bg-deep-blue text-ivory px-6 lg:px-12 relative">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-transparent" />
 
-              <motion.div
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-12 sm:gap-y-16 gap-x-8 lg:gap-10"
-                variants={staggerContainer}
-                initial="hidden"
-                animate={valuesSection.inView ? 'visible' : 'hidden'}
-              >
-                {values.map((v) => (
-                  <motion.div
-                    key={v.num}
-                    className="relative z-10 text-center bg-warm-cream px-4"
-                    variants={staggerChild}
-                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                  >
-                    <motion.div
-                      className="w-20 lg:w-24 h-20 lg:h-24 mx-auto bg-soft-sage/30 rounded-full flex items-center justify-center font-serif text-2xl lg:text-3xl mb-6 lg:mb-8"
-                      whileHover={{ scale: 1.15, rotate: 5 }}
-                      transition={{ type: 'spring', stiffness: 300 }}
-                    >
-                      {v.num}
-                    </motion.div>
-                    <h4 className="font-serif text-lg lg:text-xl mb-3">{v.title}</h4>
-                    <p className="text-xs lg:text-sm opacity-70 leading-relaxed max-w-[240px] mx-auto">
-                      {v.desc}
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div ref={missionReveal} className="max-w-lg order-2 lg:order-1">
+              <span className="mission-item text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+                Our Mission
+              </span>
+              <h2 className="mission-item font-serif text-3xl lg:text-5xl mb-6 leading-tight">
+                Elevating Everyday Living Through Thoughtful Design
+              </h2>
+              <p className="mission-item text-base lg:text-lg opacity-80 leading-relaxed mb-8">
+                We believe that great design isn't just about aesthetics — it's about how a space
+                makes you feel. Our mission is to create interiors that are not only visually
+                stunning but also deeply functional, sustainable, and reflective of the people
+                who inhabit them.
+              </p>
+
+              <div className="mission-item space-y-6">
+                <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 bg-warm-gold/20 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-lg text-gold-dark">
+                    ✦
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-sm mb-1">Vision</h4>
+                    <p className="text-sm opacity-55 leading-relaxed">
+                      To be India's most trusted interior design studio, known for creating
+                      spaces that inspire, endure, and tell authentic stories.
                     </p>
-                  </motion.div>
-                ))}
-              </motion.div>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 bg-warm-gold/20 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-lg text-gold-dark">
+                    ✦
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-sm mb-1">Promise</h4>
+                    <p className="text-sm opacity-55 leading-relaxed">
+                      Transparent pricing, on-time delivery, and a collaborative process that
+                      puts your comfort and satisfaction first.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="order-1 lg:order-2">
+              <ParallaxImage
+                src={detailSereneHaven1}
+                alt="Our Mission"
+                className="h-[350px] sm:h-[420px] lg:h-[550px] rounded-2xl"
+                speed={-0.15}
+              />
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ===== OUR CORE TEAM ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12"
-          data-purpose="team"
-          ref={teamSection.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="text-center mb-16 lg:mb-24"
-              variants={fadeUpVariant}
-              initial="hidden"
-              animate={teamSection.inView ? 'visible' : 'hidden'}
-            >
-              <span className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-3 block">
-                The People Behind PI
-              </span>
-              <h2 className="font-serif text-4xl md:text-5xl leading-tight">
-                Our Core Team
-              </h2>
-            </motion.div>
+      {/* ===== CORE VALUES ===== */}
+      <section className="py-section lg:py-desktop-section bg-ivory px-6 lg:px-12">
+        <div className="container mx-auto">
+          <div ref={useScrollReveal({ y: 40 })} className="text-center mb-16 lg:mb-24">
+            <span className="text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+              What We Stand For
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">
+              Our Core <span className="gradient-text">Values</span>
+            </h2>
+          </div>
 
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14"
-              variants={staggerContainer}
-              initial="hidden"
-              animate={teamSection.inView ? 'visible' : 'hidden'}
-            >
-              {team.map((member, index) => (
+          <div className="relative">
+            <div className="hidden lg:block absolute top-14 left-0 w-full h-px border-t border-dashed border-deep-blue/15 -z-0" />
+
+            <div ref={valuesReveal} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-12 sm:gap-y-16 gap-x-8 lg:gap-10">
+              {values.map((v) => (
                 <motion.div
-                  key={member.name}
-                  className="group text-center"
-                  variants={staggerChild}
+                  key={v.num}
+                  className="value-card relative z-10 text-center bg-ivory px-4"
+                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 >
-                  {/* Avatar */}
                   <motion.div
-                    className="relative mx-auto mb-8"
-                    whileHover={{ scale: 1.05 }}
+                    className="w-20 lg:w-28 h-20 lg:h-28 mx-auto bg-deep-blue/[0.06] rounded-full flex items-center justify-center font-serif text-2xl lg:text-3xl mb-6 lg:mb-8 text-deep-blue border border-deep-blue/10"
+                    variants={glowPulseVariant}
+                    whileHover={{ scale: 1.15, rotate: 5 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
-                    {/* Decorative ring */}
-                    <div className="absolute inset-0 w-44 h-44 lg:w-52 lg:h-52 mx-auto rounded-full border-2 border-dashed border-soft-sage/30 -rotate-6 group-hover:rotate-6 transition-transform duration-500" />
-                    
-                    <div
-                      className={`w-40 h-40 lg:w-48 lg:h-48 mx-auto rounded-full bg-gradient-to-br ${member.gradient} flex items-center justify-center overflow-hidden`}
-                    >
-                      {/* Initials placeholder — replace with <img> when photos are available */}
-                      <span className="text-warm-cream font-serif text-5xl lg:text-6xl opacity-90 select-none">
-                        {member.initials}
-                      </span>
-                    </div>
-
-                    {/* Experience badge */}
-                    <motion.div
-                      className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-forest-green text-warm-cream px-4 py-1.5 rounded-full text-[10px] lg:text-xs font-medium tracking-wide"
-                      initial={{ scale: 0 }}
-                      animate={teamSection.inView ? { scale: 1 } : {}}
-                      transition={{ delay: 0.4 + index * 0.15, type: 'spring', stiffness: 200 }}
-                    >
-                      {member.experience}
-                    </motion.div>
+                    {v.num}
                   </motion.div>
-
-                  {/* Info */}
-                  <h3 className="font-serif text-2xl lg:text-3xl mb-1">{member.name}</h3>
-                  <span className="text-soft-sage text-xs lg:text-sm uppercase tracking-widest font-medium block mb-5">
-                    {member.role}
-                  </span>
-                  <p className="text-sm opacity-60 leading-relaxed max-w-sm mx-auto">
-                    {member.bio}
+                  <h4 className="font-serif text-lg lg:text-xl mb-3">{v.title}</h4>
+                  <p className="text-xs lg:text-sm opacity-60 leading-relaxed max-w-[240px] mx-auto">
+                    {v.desc}
                   </p>
                 </motion.div>
               ))}
-            </motion.div>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ===== STATS BAR ===== */}
-        <section
-          className="py-16 lg:py-20 border-y border-forest-green/10 bg-forest-green/[0.02]"
-          data-purpose="about-stats"
-          ref={stats.ref}
-        >
-          <div className="container mx-auto px-6 lg:px-12">
-            <motion.div
-              className="grid grid-cols-2 sm:grid-cols-4 gap-8 lg:gap-12"
-              variants={staggerContainer}
-              initial="hidden"
-              animate={stats.inView ? 'visible' : 'hidden'}
-            >
-              {[
-                { value: '150+', label: 'Projects Completed' },
-                { value: '6+', label: 'Cities Served' },
-                { value: '40+', label: 'Design Awards' },
-                { value: '100%', label: 'Commitment' },
-              ].map((stat) => (
-                <motion.div
-                  key={stat.label}
-                  className="text-center"
-                  variants={staggerChild}
-                  whileHover={{ scale: 1.08, transition: { duration: 0.3 } }}
-                >
-                  <motion.span
-                    className="block font-serif text-4xl lg:text-5xl mb-2"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={stats.inView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ type: 'spring', stiffness: 200 }}
-                  >
-                    {stat.value}
-                  </motion.span>
-                  <span className="text-[10px] lg:text-xs uppercase tracking-widest opacity-50 font-medium">
-                    {stat.label}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
+      {/* ===== OUR CORE TEAM ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12">
+        <div className="container mx-auto">
+          <div ref={useScrollReveal({ y: 40 })} className="text-center mb-16 lg:mb-24">
+            <span className="text-gold-dark font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+              The People Behind PI
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">
+              Our Core <span className="gradient-text">Team</span>
+            </h2>
           </div>
-        </section>
 
-        {/* ===== CTA BANNER ===== */}
-        <section
-          className="py-section lg:py-desktop-section px-6 lg:px-12"
-          data-purpose="about-cta"
-          ref={cta.ref}
-        >
-          <div className="container mx-auto">
-            <motion.div
-              className="bg-forest-green text-warm-cream rounded-3xl p-12 md:p-20 lg:p-24 relative overflow-hidden"
-              variants={scalePopVariant}
-              initial="hidden"
-              animate={cta.inView ? 'visible' : 'hidden'}
-            >
-              {/* Decorative circles */}
-              <div className="absolute -top-20 -right-20 w-64 h-64 border border-warm-cream/5 rounded-full" />
-              <div className="absolute -bottom-32 -left-32 w-96 h-96 border border-warm-cream/5 rounded-full" />
-
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <div>
-                  <motion.span
-                    className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
-                    variants={fadeUpVariant}
-                    initial="hidden"
-                    animate={cta.inView ? 'visible' : 'hidden'}
-                  >
-                    Let's Work Together
-                  </motion.span>
-                  <motion.h2
-                    className="font-serif text-4xl md:text-5xl mb-6 leading-tight"
-                    variants={fadeUpVariant}
-                    initial="hidden"
-                    animate={cta.inView ? 'visible' : 'hidden'}
-                    transition={{ delay: 0.1 }}
-                  >
-                    Have a Project in Mind?
-                  </motion.h2>
-                  <motion.p
-                    className="text-base md:text-lg opacity-80 mb-8 leading-relaxed max-w-lg"
-                    variants={fadeUpVariant}
-                    initial="hidden"
-                    animate={cta.inView ? 'visible' : 'hidden'}
-                    transition={{ delay: 0.2 }}
-                  >
-                    Whether it's a cozy apartment makeover or a full-scale commercial fit-out,
-                    our team is ready to bring your vision to life. Let's start with a free
-                    consultation.
-                  </motion.p>
-                  <motion.div
-                    className="flex flex-col sm:flex-row gap-4"
-                    variants={fadeUpVariant}
-                    initial="hidden"
-                    animate={cta.inView ? 'visible' : 'hidden'}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Link
-                        className="bg-warm-cream text-forest-green px-8 lg:px-10 py-4 rounded-full text-sm font-medium hover:opacity-90 transition-opacity inline-block text-center"
-                        to="/contact"
-                      >
-                        Book a Free Consultation
-                      </Link>
-                    </motion.div>
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Link
-                        className="border border-warm-cream/40 text-warm-cream px-8 lg:px-10 py-4 rounded-full text-sm font-medium hover:bg-warm-cream/10 transition-all inline-block text-center"
-                        to="/projects"
-                      >
-                        View Our Work
-                      </Link>
-                    </motion.div>
-                  </motion.div>
-                </div>
-
+          <div ref={teamReveal} className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
+            {team.map((member) => (
+              <div key={member.name} className="team-member group text-center">
+                {/* Avatar */}
                 <motion.div
-                  className="hidden lg:block h-[350px] overflow-hidden rounded-xl"
-                  variants={fadeRightVariant}
-                  initial="hidden"
-                  animate={cta.inView ? 'visible' : 'hidden'}
-                  transition={{ delay: 0.2 }}
+                  className="relative mx-auto mb-8"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <img
-                    alt="Our Work"
-                    className="w-full h-full object-cover"
-                    src={detailSereneHaven2}
-                  />
+                  <div className="absolute inset-0 w-44 h-44 lg:w-52 lg:h-52 mx-auto rounded-full border-2 border-dashed border-warm-gold/25 -rotate-6 group-hover:rotate-6 transition-transform duration-500" />
+                  <div className={`w-40 h-40 lg:w-48 lg:h-48 mx-auto rounded-full bg-gradient-to-br ${member.gradient} flex items-center justify-center overflow-hidden`}>
+                    <span className="text-ivory font-serif text-5xl lg:text-6xl opacity-90 select-none">
+                      {member.initials}
+                    </span>
+                  </div>
+                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-warm-gold text-deep-blue px-4 py-1.5 rounded-full text-[10px] lg:text-xs font-medium tracking-wide">
+                    {member.experience}
+                  </div>
                 </motion.div>
+
+                <h3 className="font-serif text-2xl lg:text-3xl mb-1">{member.name}</h3>
+                <span className="text-gold-dark text-xs lg:text-sm uppercase tracking-[0.15em] font-medium block mb-5">
+                  {member.role}
+                </span>
+                <p className="text-sm opacity-55 leading-relaxed max-w-sm mx-auto">{member.bio}</p>
               </div>
-            </motion.div>
+            ))}
           </div>
-        </section>
-          </PageLayout>
+        </div>
+      </section>
+
+      {/* ===== STATS BAR ===== */}
+      <section className="py-16 lg:py-20 bg-deep-blue text-ivory relative" ref={stats.ref}>
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-transparent" />
+
+        <div className="container mx-auto px-6 lg:px-12">
+          <motion.div
+            className="grid grid-cols-2 sm:grid-cols-4 gap-8 lg:gap-12"
+            variants={staggerContainer}
+            initial="hidden"
+            animate={stats.inView ? 'visible' : 'hidden'}
+          >
+            {[
+              { value: '150+', label: 'Projects Completed' },
+              { value: '6+', label: 'Cities Served' },
+              { value: '40+', label: 'Design Awards' },
+              { value: '100%', label: 'Commitment' },
+            ].map((stat) => (
+              <motion.div
+                key={stat.label}
+                className="text-center"
+                variants={staggerChild}
+                whileHover={{ scale: 1.08, transition: { duration: 0.3 } }}
+              >
+                <motion.span
+                  className="block font-serif text-4xl lg:text-5xl mb-2 text-warm-gold"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={stats.inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ type: 'spring', stiffness: 200 }}
+                >
+                  {stat.value}
+                </motion.span>
+                <span className="text-[10px] lg:text-xs uppercase tracking-[0.2em] opacity-45 font-medium">
+                  {stat.label}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-transparent" />
+      </section>
+
+      {/* ===== CTA BANNER ===== */}
+      <section className="py-section lg:py-desktop-section px-6 lg:px-12" ref={cta.ref}>
+        <div className="container mx-auto">
+          <motion.div
+            className="bg-gradient-to-br from-deep-blue via-deep-blue to-[#1a2f3d] text-ivory rounded-3xl p-12 md:p-20 lg:p-24 relative overflow-hidden"
+            initial={{ opacity: 0, y: 60, scale: 0.95 }}
+            animate={cta.inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.div
+              className="absolute -top-20 -right-20 w-64 h-64 border border-warm-gold/10 rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+            />
+            <motion.div
+              className="absolute -bottom-32 -left-32 w-96 h-96 border border-warm-gold/10 rounded-full"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
+            />
+
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <div ref={useScrollReveal({ y: 40, stagger: 0.1, childSelector: '.cta-item' })}>
+                <span className="cta-item text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+                  Let's Work Together
+                </span>
+                <h2 className="cta-item font-serif text-4xl md:text-5xl mb-6 leading-tight">
+                  Have a Project in Mind?
+                </h2>
+                <p className="cta-item text-base md:text-lg opacity-75 mb-8 leading-relaxed max-w-lg">
+                  Whether it's a cozy apartment makeover or a full-scale commercial fit-out,
+                  our team is ready to bring your vision to life. Let's start with a free consultation.
+                </p>
+                <div className="cta-item flex flex-col sm:flex-row gap-4">
+                  <MagneticButton
+                    as="a"
+                    href="/contact"
+                    className="bg-warm-gold text-deep-blue px-8 lg:px-10 py-4 rounded-full text-sm font-semibold hover:shadow-[0_8px_30px_rgba(248,217,132,0.4)] transition-shadow text-center"
+                  >
+                    Book a Free Consultation
+                  </MagneticButton>
+                  <MagneticButton
+                    as="a"
+                    href="/projects"
+                    className="border border-ivory/25 text-ivory px-8 lg:px-10 py-4 rounded-full text-sm font-medium hover:bg-ivory/8 transition-all text-center"
+                  >
+                    View Our Work
+                  </MagneticButton>
+                </div>
+              </div>
+
+              <div className="hidden lg:block">
+                <ParallaxImage
+                  src={detailSereneHaven2}
+                  alt="Our Work"
+                  className="h-[350px] rounded-2xl"
+                  speed={-0.1}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </PageLayout>
   )
 }
 

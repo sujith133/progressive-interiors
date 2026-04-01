@@ -3,30 +3,131 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    cursor: none;
+  }
   body {
-    scroll-behavior: smooth;
+    cursor: none;
+  }
+
+  /* Restore cursor on touch devices */
+  @media (hover: none) {
+    html, body {
+      cursor: auto;
+    }
+  }
+
+  /* Custom selection colors */
+  ::selection {
+    background: rgba(248, 217, 132, 0.35);
+    color: #264053;
   }
 }
 
 @layer utilities {
   .hero-gradient {
-    background: linear-gradient(to bottom, transparent, #F7F6F2);
+    background: linear-gradient(to bottom, transparent, #FAF9F6);
+  }
+
+  /* Gold shimmer gradient for CTAs */
+  .btn-shimmer {
+    background: linear-gradient(
+      110deg,
+      #264053 0%,
+      #264053 40%,
+      #3a5a70 50%,
+      #264053 60%,
+      #264053 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  /* Gold accent underline */
+  .gold-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .gold-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #F8D984, transparent);
+  }
+
+  /* Floating gold particles */
+  .gold-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #F8D984;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: float 6s ease-in-out infinite;
+  }
+  .gold-particle:nth-child(2) { animation-delay: -2s; opacity: 0.3; width: 6px; height: 6px; }
+  .gold-particle:nth-child(3) { animation-delay: -4s; opacity: 0.2; width: 3px; height: 3px; }
+
+  /* Gradient text utility — dark gold for light backgrounds */
+  .gradient-text {
+    background: linear-gradient(135deg, #B8972F, #9A7B1A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  /* Bright gold variant for dark backgrounds */
+  .gradient-text-light {
+    background: linear-gradient(135deg, #F8D984, #e6c46e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glow shadow on hover */
+  .hover-glow:hover {
+    box-shadow: 0 8px 30px rgba(248, 217, 132, 0.25);
+  }
+
+  /* GSAP Reveal clip-path helpers */
+  .reveal-clip {
+    clip-path: inset(0 0 100% 0);
+  }
+  .reveal-clip-visible {
+    clip-path: inset(0 0 0% 0);
+  }
+
+  /* Scroll-scrubbed line */
+  .process-line {
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  /* Section divider with gradient */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #264053 20%, #F8D984 50%, #264053 80%, transparent);
+    opacity: 0.2;
   }
 }
 
 @layer components {
   .ghost-button {
-    @apply border border-forest-green transition-all duration-300 ease-in-out;
+    @apply border border-deep-blue transition-all duration-300 ease-in-out;
   }
   .ghost-button:hover {
-    @apply bg-forest-green text-warm-cream;
+    @apply bg-deep-blue text-ivory;
+    box-shadow: 0 4px 20px rgba(38, 64, 83, 0.3);
   }
   .nav-link {
     @apply relative;
   }
   .nav-link::after {
     content: '';
-    @apply absolute w-0 h-[1px] -bottom-[2px] left-0 bg-forest-green transition-all duration-300 ease-in-out;
+    @apply absolute w-0 h-[2px] -bottom-[2px] left-0 transition-all duration-300 ease-in-out;
+    background: linear-gradient(90deg, #F8D984, #264053);
   }
   .nav-link:hover::after {
     @apply w-full;
@@ -60,5 +161,19 @@
   }
   .testimonial-card {
     min-width: unset;
+  }
+}
+
+/* Horizontal scroll portfolio */
+.horizontal-card {
+  flex-shrink: 0;
+  width: 55vw;
+  min-width: 400px;
+  max-width: 700px;
+}
+@media (max-width: 768px) {
+  .horizontal-card {
+    width: 85vw;
+    min-width: 280px;
   }
 }

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import PageLayout from '../components/PageLayout'
-import { fadeUpVariant, useSectionInView } from '../utils/animations'
+import { fadeUpVariant, textRevealVariant, useSectionInView } from '../utils/animations'
 
 const TermsPage = () => {
   const hero = useSectionInView(0.15)
@@ -10,12 +10,16 @@ const TermsPage = () => {
     <PageLayout>
       {/* Hero */}
       <section
-        className="bg-forest-green text-warm-cream py-24 lg:py-32 px-6 lg:px-12"
+        className="bg-deep-blue text-ivory py-24 lg:py-32 px-6 lg:px-12 relative overflow-hidden"
         ref={hero.ref}
       >
+        {/* Floating gold particles */}
+        <div className="absolute top-20 left-[15%] gold-particle" />
+        <div className="absolute top-40 right-[20%] gold-particle" />
+
         <div className="container mx-auto text-center">
           <motion.span
-            className="text-soft-sage font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
+            className="text-warm-gold font-medium tracking-widest uppercase text-xs lg:text-sm mb-4 block"
             variants={fadeUpVariant}
             initial="hidden"
             animate={hero.inView ? 'visible' : 'hidden'}
@@ -24,7 +28,7 @@ const TermsPage = () => {
           </motion.span>
           <motion.h1
             className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.1]"
-            variants={fadeUpVariant}
+            variants={textRevealVariant}
             initial="hidden"
             animate={hero.inView ? 'visible' : 'hidden'}
             transition={{ delay: 0.1 }}
@@ -79,7 +83,7 @@ const TermsPage = () => {
             <li>Make payments as per the agreed schedule outlined in the project contract.</li>
           </ul>
 
-          <h2 className="font-serif text-2xl lg:text-3xl mb-4">4. Payments & Billing</h2>
+          <h2 className="font-serif text-2xl lg:text-3xl mb-4">4. Payments &amp; Billing</h2>
           <ul className="list-disc pl-6 space-y-2 text-sm lg:text-base opacity-80 mb-8">
             <li>A non-refundable booking advance (typically 30–50% of the project fee) is required to commence design work.</li>
             <li>Progress payments will be invoiced at milestones defined in the project contract.</li>
@@ -105,14 +109,14 @@ const TermsPage = () => {
             properties without prior written consent.
           </p>
 
-          <h2 className="font-serif text-2xl lg:text-3xl mb-4">7. Cancellation & Refunds</h2>
+          <h2 className="font-serif text-2xl lg:text-3xl mb-4">7. Cancellation &amp; Refunds</h2>
           <ul className="list-disc pl-6 space-y-2 text-sm lg:text-base opacity-80 mb-8">
             <li>The initial booking advance is non-refundable once design work has commenced.</li>
             <li>Cancellations must be communicated in writing at least 14 days before the next scheduled milestone.</li>
             <li>In case of cancellation, the client is responsible for payment of all work completed up to the date of cancellation, including any committed material or vendor orders.</li>
           </ul>
 
-          <h2 className="font-serif text-2xl lg:text-3xl mb-4">8. Warranties & Limitations</h2>
+          <h2 className="font-serif text-2xl lg:text-3xl mb-4">8. Warranties &amp; Limitations</h2>
           <p className="text-sm lg:text-base opacity-80 leading-relaxed mb-8">
             We strive for the highest quality in our design and execution. However, we do not
             guarantee exact colour matches across different materials and lighting conditions.
@@ -128,7 +132,7 @@ const TermsPage = () => {
             are not liable for indirect, incidental, or consequential damages.
           </p>
 
-          <h2 className="font-serif text-2xl lg:text-3xl mb-4">10. Portfolio & Photography</h2>
+          <h2 className="font-serif text-2xl lg:text-3xl mb-4">10. Portfolio &amp; Photography</h2>
           <p className="text-sm lg:text-base opacity-80 leading-relaxed mb-8">
             We reserve the right to photograph completed projects for our portfolio, website, social
             media, and marketing materials. If you prefer your project to remain private, please
@@ -146,7 +150,7 @@ const TermsPage = () => {
           <p className="text-sm lg:text-base opacity-80 leading-relaxed mb-2">
             For any questions regarding these Terms &amp; Conditions, please reach out to us:
           </p>
-          <div className="bg-forest-green/[0.03] border border-forest-green/10 rounded-xl p-6 text-sm opacity-80 leading-relaxed">
+          <div className="bg-deep-blue/[0.03] border border-deep-blue/10 rounded-xl p-6 text-sm opacity-80 leading-relaxed">
             <p><strong>Progressive Interiors</strong></p>
             <p>2nd Floor, Brindavan Colony, A. S. Rao Nagar, Hyderabad, Telangana 500062</p>
             <p>Email: hello@progressiveinteriors.in</p>
