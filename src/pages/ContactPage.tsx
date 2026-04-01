@@ -1,13 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import PageLayout from '../components/PageLayout'
 import MagneticButton from '../components/MagneticButton'
 import { useScrollReveal } from '../hooks/useGSAP'
 import {
-  staggerContainer,
-  staggerChild,
   useSectionInView,
 } from '../utils/animations'
 

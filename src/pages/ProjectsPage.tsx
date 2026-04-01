@@ -5,7 +5,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PageLayout from '../components/PageLayout'
 import MagneticButton from '../components/MagneticButton'
-import { useScrollReveal } from '../hooks/useGSAP'
 import {
   staggerContainer,
   staggerChild,
@@ -28,7 +27,7 @@ const ProjectsPage = () => {
   const heroSubRef = useRef<HTMLParagraphElement>(null)
   const heroImageRef = useRef<HTMLImageElement>(null)
 
-  const gridReveal = useScrollReveal({ y: 50, stagger: 0.12, childSelector: '.project-card' })
+
 
   const filters = useSectionInView(0.3)
   const cta = useSectionInView(0.25)
