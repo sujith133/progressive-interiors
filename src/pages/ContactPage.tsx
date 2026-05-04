@@ -94,6 +94,16 @@ const faqs = [
 const ContactPage = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [formLoading, setFormLoading] = useState(false)
+
+  const formRef = {
+    name: useState(''),
+    email: useState(''),
+    phone: useState(''),
+    service: useState(''),
+    message: useState(''),
+  }
 
   // GSAP hero
   const heroTagRef = useRef<HTMLSpanElement>(null)
@@ -111,10 +121,29 @@ const ContactPage = () => {
   const whatsappUrl =
     'https://wa.me/919052525249?text=Hi%20Progressive%20Interiors!%20I%27m%20interested%20in%20your%20design%20services.'
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setFormSubmitted(true)
-    setTimeout(() => setFormSubmitted(false), 4000)
+    setFormError(null)
+    setFormLoading(true)
+    try {
+      const res = await fetch('/.netlify/functions/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formRef.name[0],
+          email: formRef.email[0],
+          phone: formRef.phone[0],
+          service: formRef.service[0],
+          message: formRef.message[0],
+        }),
+      })
+      if (!res.ok) throw new Error('Failed to send')
+      setFormSubmitted(true)
+    } catch {
+      setFormError('Something went wrong. Please try WhatsApp or call us directly.')
+    } finally {
+      setFormLoading(false)
+    }
   }
 
   // Hero entrance
@@ -206,38 +235,77 @@ const ContactPage = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Full Name *</label>
-                        <input type="text" required className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30" placeholder="Your name" />
+                        <input
+                          type="text"
+                          required
+                          value={formRef.name[0]}
+                          onChange={(e) => formRef.name[1](e.target.value)}
+                          className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30"
+                          placeholder="Your name"
+                        />
                       </div>
                       <div>
                         <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Email Address *</label>
-                        <input type="email" required className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30" placeholder="you@email.com" />
+                        <input
+                          type="email"
+                          required
+                          value={formRef.email[0]}
+                          onChange={(e) => formRef.email[1](e.target.value)}
+                          className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30"
+                          placeholder="you@email.com"
+                        />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Phone Number</label>
-                        <input type="tel" className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30" placeholder="+91 XXXXX XXXXX" />
+                        <input
+                          type="tel"
+                          value={formRef.phone[0]}
+                          onChange={(e) => formRef.phone[1](e.target.value)}
+                          className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors placeholder:text-deep-blue/30"
+                          placeholder="+91 XXXXX XXXXX"
+                        />
                       </div>
                       <div>
                         <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Service Interested In</label>
-                        <select className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors appearance-none cursor-pointer">
+                        <select
+                          value={formRef.service[0]}
+                          onChange={(e) => formRef.service[1](e.target.value)}
+                          className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors appearance-none cursor-pointer"
+                        >
                           <option value="">Select a service</option>
-                          <option value="residential">Residential Design</option>
-                          <option value="space-planning">Space Planning & Renovation</option>
-                          <option value="material-curation">Material & Decor Curation</option>
-                          <option value="other">Other / Not Sure</option>
+                          <option value="Residential Design">Residential Design</option>
+                          <option value="Commercial Design">Commercial Design</option>
+                          <option value="Space Planning & Renovation">Space Planning & Renovation</option>
+                          <option value="Material & Decor Curation">Material & Decor Curation</option>
+                          <option value="Other / Not Sure">Other / Not Sure</option>
                         </select>
                       </div>
                     </div>
 
                     <div>
                       <label className="block text-xs uppercase tracking-[0.15em] font-medium mb-2 opacity-55">Your Message *</label>
-                      <textarea required rows={5} className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors resize-none placeholder:text-deep-blue/30" placeholder="Tell us about your space, vision, and any specific requirements..." />
+                      <textarea
+                        required
+                        rows={5}
+                        value={formRef.message[0]}
+                        onChange={(e) => formRef.message[1](e.target.value)}
+                        className="w-full bg-transparent border-b-2 border-deep-blue/15 focus:border-warm-gold/60 py-3 text-sm outline-none transition-colors resize-none placeholder:text-deep-blue/30"
+                        placeholder="Tell us about your space, vision, and any specific requirements..."
+                      />
                     </div>
 
-                    <MagneticButton type="submit" className="btn-shimmer text-ivory px-10 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:shadow-lg transition-shadow">
-                      Send Message
+                    {formError && (
+                      <p className="text-sm text-red-500 opacity-80">{formError}</p>
+                    )}
+
+                    <MagneticButton
+                      type="submit"
+                      className="btn-shimmer text-ivory px-10 lg:px-12 py-4 lg:py-5 rounded-full text-sm font-medium hover:shadow-lg transition-shadow disabled:opacity-60"
+                    >
+                      {formLoading ? 'Sending…' : 'Send Message'}
                     </MagneticButton>
                   </motion.form>
                 )}
@@ -262,11 +330,11 @@ const ContactPage = () => {
                   </div>
                 </motion.div>
 
-                <motion.a href="mailto:hello@progressiveinteriors.in" className="flex items-start gap-5 p-5 bg-deep-blue/[0.03] rounded-xl border border-deep-blue/5 block" whileHover={{ x: 4, transition: { duration: 0.2 } }}>
+                <motion.a href="mailto:sales@progressiveinteriors.in" className="flex items-start gap-5 p-5 bg-deep-blue/[0.03] rounded-xl border border-deep-blue/5 block" whileHover={{ x: 4, transition: { duration: 0.2 } }}>
                   <div className="w-12 h-12 bg-warm-gold/20 rounded-full flex items-center justify-center flex-shrink-0 text-deep-blue"><MailIcon /></div>
                   <div>
                     <h4 className="font-medium text-sm mb-1">Email Us</h4>
-                    <p className="text-sm opacity-55">hello@progressiveinteriors.in</p>
+                    <p className="text-sm opacity-55">sales@progressiveinteriors.in</p>
                   </div>
                 </motion.a>
 

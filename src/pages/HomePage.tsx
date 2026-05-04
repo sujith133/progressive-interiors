@@ -42,7 +42,7 @@ const HomePage = () => {
   
   // Counter refs
   const counter1 = useCountUp(15, 2.5)
-  const counter2 = useCountUp(450, 2.5)
+  const counter2 = useCountUp(200, 2.5)
   const counter3 = useCountUp(99, 2.5)
   const counter4 = useCountUp(12, 2.5)
 
@@ -493,6 +493,71 @@ const HomePage = () => {
       {/* ===== SECTION DIVIDER ===== */}
       <div className="section-divider" />
 
+      {/* ===== INTRODUCTION VIDEOS ===== */}
+      <section className="py-section lg:py-desktop-section bg-deep-blue text-ivory px-6 lg:px-12 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-transparent" />
+        <div className="absolute top-20 left-[10%] gold-particle" />
+        <div className="absolute bottom-20 right-[10%] gold-particle" />
+
+        <div className="container mx-auto">
+          {/* Header */}
+          <motion.div
+            className="text-center mb-14 lg:mb-20"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="text-warm-gold font-medium tracking-[0.3em] uppercase text-xs lg:text-sm mb-4 block">
+              See Our Work
+            </span>
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">
+              Progressive Interiors <span className="gradient-text-light">in Motion</span>
+            </h2>
+            <p className="mt-5 text-sm md:text-base opacity-60 max-w-xl mx-auto leading-relaxed">
+              A glimpse into the spaces we create and the craft behind every detail.
+            </p>
+          </motion.div>
+
+          {/* Video grid — vertical (9:16) side by side */}
+          <div className="flex flex-col sm:flex-row justify-center items-start gap-6 lg:gap-10">
+            {[
+              { id: 'BlsNTKZzjiw', label: 'Studio Introduction' },
+              { id: 'cKP6YGC8F08', label: 'Our Design Process' },
+            ].map((video, i) => (
+              <motion.div
+                key={video.id}
+                className="w-full sm:w-[280px] lg:w-[320px] flex-shrink-0"
+                initial={{ opacity: 0, y: 60 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {/* 9:16 aspect ratio wrapper */}
+                <div className="relative w-full rounded-2xl overflow-hidden border border-warm-gold/15 shadow-2xl" style={{ paddingTop: '177.78%' }}>
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1&playsinline=1`}
+                    title={video.label}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </div>
+                <p className="mt-4 text-center text-xs uppercase tracking-[0.2em] opacity-45 font-medium">
+                  {video.label}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-transparent" />
+      </section>
+
+      {/* ===== SECTION DIVIDER ===== */}
+      <div className="section-divider" />
+
       {/* ===== TESTIMONIALS ===== */}
       <section
         className="py-section lg:py-desktop-section px-6 lg:px-12 overflow-hidden"
@@ -516,19 +581,19 @@ const HomePage = () => {
           >
             {[
               {
-                quote: '"The level of detail and the serene atmosphere they created in our beach house is simply unmatched."',
-                name: 'Elena Richardson',
-                location: 'Malibu Residency',
+                quote: '"The level of craft and the peaceful atmosphere Progressive Interiors created in our home is truly unmatched. Every detail feels intentional."',
+                name: 'Gauri Shankar',
+                location: 'Amaravathi Grand, Hyderabad',
               },
               {
-                quote: '"Working with PI was a dream. They understood my need for minimalism without losing the cozy soul of a home."',
-                name: 'Marcus Chen',
-                location: 'Skyline Apartment',
+                quote: '"Working with PI was effortless. They understood exactly what we wanted — a modern home that still has the warmth of Indian living."',
+                name: 'Kavya Reddy',
+                location: 'My Home Avatar, Hyderabad',
               },
               {
-                quote: '"Professional, intuitive, and highly talented. Our office feels like a wellness retreat now."',
-                name: 'Sarah Jenkins',
-                location: 'Bloom HQ',
+                quote: '"Professional, creative, and deeply attentive. Our office now feels like a place people actually want to come to work."',
+                name: 'Bimal Sharma',
+                location: 'Corporate Fit-Out, Hyderabad',
               },
             ].map((t, i) => (
               <motion.div

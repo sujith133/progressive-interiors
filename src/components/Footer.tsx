@@ -133,7 +133,7 @@ const Footer = () => {
               Contact
             </h5>
             <ul className="space-y-3 lg:space-y-4 text-xs lg:text-sm opacity-80">
-              <li>hello@progressiveinteriors.in</li>
+              <li>sales@progressiveinteriors.in</li>
               <li>+91 90525 25249</li>
               <li>
                 2nd Floor, Brindavan Colony,<br />

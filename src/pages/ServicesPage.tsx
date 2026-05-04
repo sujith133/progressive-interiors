@@ -15,6 +15,7 @@ import {
 import serviceResidentialDesign from '../assets/images/service-residential-design.webp'
 import serviceSpacePlanning from '../assets/images/service-space-planning.webp'
 import serviceMaterialCuration from '../assets/images/service-material-curation.webp'
+import serviceCommercialDesign from '../assets/images/project-botanical-studio.webp'
 import brandStudioWorkspace from '../assets/images/brand-studio-workspace.png'
 import detailSereneHaven1 from '../assets/images/detail-serene-haven-1.webp'
 
@@ -66,6 +67,20 @@ const services = [
       'Sustainability-focused material alternatives',
     ],
   },
+  {
+    title: 'Commercial Design',
+    tagline: 'Workspaces That Work Beautifully',
+    image: serviceCommercialDesign,
+    description:
+      'From corporate headquarters to boutique retail, we design commercial spaces that align with your brand, support your people, and impress your clients. Our commercial design service covers the full spectrum — from open-plan offices and executive suites to showrooms, hospitality lounges, and tech campuses.',
+    inclusions: [
+      'Corporate office & fit-out design',
+      'Brand identity integration',
+      'Ergonomic workspace planning',
+      'Retail & showroom design',
+      'Hospitality & F&B interior design',
+    ],
+  },
 ]
 
 const processSteps = [
@@ -78,19 +93,19 @@ const processSteps = [
 
 const testimonials = [
   {
-    quote: '"Progressive Interiors transformed our family home in Bangalore into something out of a design magazine. Their attention to Indian craftsmanship is unparalleled."',
-    name: 'Priya & Arjun Sharma',
-    location: 'Ananda Villa, Bangalore',
+    quote: '"Progressive Interiors transformed our Hyderabad home into something extraordinary. Their eye for Indian craft and their attention to every detail is simply unparalleled."',
+    name: 'Gauri Shankar',
+    location: 'Amaravathi Grand, Hyderabad',
   },
   {
-    quote: '"Working with PI was effortless. They understood our need for a modern workspace that still felt warm and green. Our team productivity has actually increased!"',
-    name: 'Kavitha Rajan',
-    location: 'Vanam Studio, Chennai',
+    quote: '"Working with PI was effortless. They understood our need for a modern workspace that still felt warm and welcoming. Our team now loves coming to the office!"',
+    name: 'Kavitha Nair',
+    location: 'Commercial Fit-Out, Hyderabad',
   },
   {
-    quote: '"From the first mood board to the final reveal, the process was transparent and exciting. Our guests now think they\'re staying at a luxury boutique hotel."',
-    name: 'Rahul Mehta',
-    location: 'Shanti Suite, Rishikesh',
+    quote: '"From the first mood board to the final reveal, everything was transparent and exciting. Progressive Interiors delivered exactly what they promised — and more."',
+    name: 'Bimal Sharma',
+    location: 'Rainbow Vistas, Hyderabad',
   },
 ]
 
@@ -314,8 +329,8 @@ const ServicesPage = () => {
             animate={stats.inView ? 'visible' : 'hidden'}
           >
             {[
-              { value: '150+', label: 'Projects Delivered' },
-              { value: '12+', label: 'Years Experience' },
+              { value: '200+', label: 'Projects Delivered' },
+              { value: '15+', label: 'Years Experience' },
               { value: '98%', label: 'Client Satisfaction' },
               { value: '40+', label: 'Design Awards' },
             ].map((stat) => (

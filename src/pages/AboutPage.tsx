@@ -26,25 +26,41 @@ const team = [
     name: 'Syam Chopra',
     role: 'Director',
     initials: 'SC',
-    experience: '15 Years',
+    experience: '15+ Years',
     bio: 'Recognized for strong leadership and client-centric collaboration, Syam Chopra thrives in dynamic environments, working closely with architects, contractors, and stakeholders to achieve outstanding results. Whether designing luxury homes, corporate offices, or hospitality spaces, he brings a strategic approach, sharp attention to detail, and a passion for elevating built environments. He has successfully managed end-to-end projects, from conceptual design and space planning to execution and final handover.',
     gradient: 'from-deep-blue to-deep-blue/70',
   },
   {
-    name: 'E. Hanock Moses',
-    role: 'Marketing Director',
-    initials: 'HM',
-    experience: '8 Years',
-    bio: 'With 8 years of hands-on experience in interior design and construction, E. Hanock Moses is a seasoned professional known for blending creativity with technical precision to deliver exceptional spaces. Specializing in residential, commercial, and retail projects, he has a proven track record of transforming client visions into reality through innovative design, meticulous planning, and flawless execution.',
+    name: 'Dilip Kumar',
+    role: 'Sales Manager',
+    initials: 'DK',
+    experience: '10+ Years',
+    bio: 'Dilip Kumar brings over a decade of client relationship expertise to Progressive Interiors. He is the first point of contact for new clients and is known for his ability to understand a brief deeply and translate aspirations into actionable project scopes. His straightforward approach, clear communication, and genuine care for client satisfaction have earned him a reputation as the backbone of PI\'s growth.',
     gradient: 'from-warm-gold/80 to-warm-gold/40',
   },
   {
-    name: 'Bh. Pavan Kumar',
-    role: 'Marketing Director',
-    initials: 'PK',
-    experience: '10+ Years',
-    bio: 'Bh. Pavan Kumar is an effective team leader and communicator, adept at coordinating between architects, engineers, vendors, and clients to maintain smooth project workflows. Known for his attention to detail, strong work ethic, and commitment to client satisfaction, he has built a reputation for delivering projects on time, within budget, and above expectations. He stays updated with the latest trends in materials, technology, and sustainable building practices, ensuring each project reflects current standards and long-term durability.',
+    name: 'Manohar',
+    role: 'Senior Designer',
+    initials: 'MN',
+    experience: '12+ Years',
+    bio: 'Manohar is the creative lead behind some of Progressive Interiors\' most celebrated residential and commercial projects. With a background in architecture and a deep love for Indian craft traditions, he brings both structural rigour and artistic sensibility to every project. His expertise in space planning, material selection, and 3D visualisation ensures that what clients see on screen becomes reality without compromise.',
     gradient: 'from-deep-blue/80 to-warm-gold/30',
+  },
+  {
+    name: 'Shreya Gandhi',
+    role: 'Junior Designer',
+    initials: 'SG',
+    experience: '3+ Years',
+    bio: 'Shreya Gandhi joined Progressive Interiors with a fresh perspective and a meticulous eye for detail. She specialises in material curation, mood board development, and client presentation design. Her work is characterised by a thoughtful sensitivity to colour and texture, and she brings an up-to-date awareness of global design trends that keeps PI\'s work feeling current and relevant.',
+    gradient: 'from-warm-gold/60 to-deep-blue/40',
+  },
+  {
+    name: 'Harishwar Reddy',
+    role: 'Junior Designer',
+    initials: 'HR',
+    experience: '3+ Years',
+    bio: 'Harishwar Reddy is a versatile designer with strong technical skills in AutoCAD, SketchUp, and 3D rendering. He manages site coordination and working drawing production for ongoing projects, ensuring that design intent is faithfully communicated to craftsmen and contractors. His precision on-site and collaborative spirit make him an essential part of PI\'s project delivery team.',
+    gradient: 'from-deep-blue/60 to-warm-gold/50',
   },
 ]
 
@@ -180,7 +196,7 @@ const AboutPage = () => {
               </p>
               <div className="story-item flex gap-12">
                 <div>
-                  <span className="block font-serif text-3xl lg:text-4xl mb-1 text-gold-dark">150+</span>
+                  <span className="block font-serif text-3xl lg:text-4xl mb-1 text-gold-dark">200+</span>
                   <span className="text-[10px] lg:text-xs uppercase tracking-[0.15em] opacity-45 font-medium">Projects</span>
                 </div>
                 <div>
@@ -310,7 +326,7 @@ const AboutPage = () => {
             </h2>
           </div>
 
-          <div ref={teamReveal} className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
+          <div ref={teamReveal} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14">
             {team.map((member) => (
               <div key={member.name} className="team-member group text-center">
                 {/* Avatar */}
@@ -353,7 +369,7 @@ const AboutPage = () => {
             animate={stats.inView ? 'visible' : 'hidden'}
           >
             {[
-              { value: '150+', label: 'Projects Completed' },
+              { value: '200+', label: 'Projects Completed' },
               { value: '6+', label: 'Cities Served' },
               { value: '40+', label: 'Design Awards' },
               { value: '100%', label: 'Commitment' },
