@@ -51,7 +51,7 @@ const team = [
     role: 'Junior Designer',
     initials: 'SG',
     experience: '3+ Years',
-    bio: 'Shreya Gandhi joined Progressive Interiors with a fresh perspective and a meticulous eye for detail. She specialises in material curation, mood board development, and client presentation design. Her work is characterised by a thoughtful sensitivity to colour and texture, and she brings an up-to-date awareness of global design trends that keeps PI\'s work feeling current and relevant.',
+    bio: 'Shreya Gandhi is a Junior Designer at Progressive Interiors, proficient in AutoCAD, SketchUp, and 3D visualisation. She contributes to project development through technical drawings, material curation, mood board development, and client presentation design. Her work reflects a strong eye for detail, thoughtful spatial sensibility, and an awareness of evolving design trends.',
     gradient: 'from-warm-gold/60 to-deep-blue/40',
   },
   {

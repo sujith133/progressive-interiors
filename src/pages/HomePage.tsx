@@ -583,17 +583,17 @@ const HomePage = () => {
               {
                 quote: '"The level of craft and the peaceful atmosphere Progressive Interiors created in our home is truly unmatched. Every detail feels intentional."',
                 name: 'Gauri Shankar',
-                location: 'Amaravathi Grand, Hyderabad',
+                location: 'Jyothi Serenity, Hyderabad',
               },
               {
                 quote: '"Working with PI was effortless. They understood exactly what we wanted — a modern home that still has the warmth of Indian living."',
-                name: 'Kavya Reddy',
-                location: 'My Home Avatar, Hyderabad',
+                name: 'Kavitha',
+                location: 'Amaravati Grand, Hyderabad',
               },
               {
                 quote: '"Professional, creative, and deeply attentive. Our office now feels like a place people actually want to come to work."',
                 name: 'Bimal Sharma',
-                location: 'Corporate Fit-Out, Hyderabad',
+                location: 'Meridian Cargo Pvt. Ltd',
               },
             ].map((t, i) => (
               <motion.div

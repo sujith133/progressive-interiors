@@ -84,7 +84,7 @@ const faqs = [
   {
     question: 'Do you work outside Hyderabad?',
     answer:
-      'Absolutely. While our studio is based in Hyderabad, we work with clients across India. We have completed projects in Bangalore, Mumbai, Goa, Chennai, Jaipur, and Rishikesh. For out-of-city projects, we schedule regular site visits and use video conferencing for seamless collaboration.',
+      'Absolutely. While our studio is based in Hyderabad, we work with clients across India. We have completed projects in Goa, Chennai, Jaipur, and Rishikesh. For out-of-city projects, we schedule regular site visits and use video conferencing for seamless collaboration.',
   },
 ]
 
