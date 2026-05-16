@@ -11,9 +11,13 @@ import projectOakStoneVilla from '../assets/images/project-oak-stone-villa.webp'
 import projectMinimalistPenthouse from '../assets/images/project-minimalist-penthouse.webp'
 
 // Residential project thumbnails — run `node scripts/generate-images.js` to replace with generated images
-import projectAmaravathiGrand from '../assets/images/project-serene-haven.webp'
-import projectJyothiSerenity from '../assets/images/project-coastal-retreat.webp'
-import projectOncloud33 from '../assets/images/project-minimalist-penthouse.webp'
+import projectAmaravathiGrand from '../assets/images/images/dinein.jpg'
+import amaravathiKitchen1 from '../assets/images/images/kitchen1.jpg'
+import projectJyothiSerenity from '../assets/images/images/kitchen2.jpg'
+import jyothiEntrance from '../assets/images/images/entrance.jpg'
+import projectOncloud33 from '../assets/images/images/hall.jpg'
+import oncloudShelf2 from '../assets/images/images/shelf2.jpg'
+import oncloudShelfs from '../assets/images/images/shelfs.jpg'
 import projectCanduer40 from '../assets/images/detail-serene-haven-1.webp'
 import projectRainbowVistas from '../assets/images/detail-serene-haven-2.webp'
 import projectMyHomeAvatar from '../assets/images/project-urban-loft.webp'
@@ -57,9 +61,9 @@ export const projects: Project[] = [
     description:
       'Amaravathi Grand is a statement of refined living — a sprawling villa in Hyderabad where every surface speaks of craftsmanship and intent. We layered Rajasthani sandstone feature walls with custom teak joinery, handwoven silk upholstery, and bespoke brass fixtures to create a home that feels both monumental and intimately warm. The double-height living hall, framed by floor-to-ceiling glass doors opening to a landscaped garden, is the centrepiece of a space designed to host and to retreat in equal measure.',
     scope: 'Full Interior Design & Landscaping',
-    location: 'Hyderabad, India',
+    location: 'Vijayawada, India',
     thumbnail: projectAmaravathiGrand,
-    images: [projectAmaravathiGrand, detailSereneHaven1, detailSereneHaven2],
+    images: [projectAmaravathiGrand, amaravathiKitchen1],
   },
   {
     slug: 'jyothi-serenity',
@@ -71,7 +75,7 @@ export const projects: Project[] = [
     scope: 'Full Interior Design & Furniture Curation',
     location: 'Hyderabad, India',
     thumbnail: projectJyothiSerenity,
-    images: [projectJyothiSerenity, detailSereneHaven1, projectSereneHaven],
+    images: [projectJyothiSerenity, jyothiEntrance],
   },
   {
     slug: 'oncloud33',
@@ -83,7 +87,7 @@ export const projects: Project[] = [
     scope: 'Interior Design & Custom Furniture',
     location: 'Hyderabad, India',
     thumbnail: projectOncloud33,
-    images: [projectOncloud33, projectMinimalistPenthouse, detailSereneHaven2],
+    images: [projectOncloud33, oncloudShelf2, oncloudShelfs],
   },
   {
     slug: 'canduer40',
