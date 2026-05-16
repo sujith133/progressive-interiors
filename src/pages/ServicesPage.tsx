@@ -94,18 +94,18 @@ const processSteps = [
 const testimonials = [
   {
     quote: '"Progressive Interiors transformed our Hyderabad home into something extraordinary. Their eye for Indian craft and their attention to every detail is simply unparalleled."',
-    name: 'Gauri Shankar',
-    location: 'Amaravathi Grand, Hyderabad',
+    name: 'Kavitha',
+    location: 'Amaravathi Grand, Vijayawada',
   },
   {
     quote: '"Working with PI was effortless. They understood our need for a modern workspace that still felt warm and welcoming. Our team now loves coming to the office!"',
-    name: 'Kavitha Nair',
+    name: 'Bimal Sharma',
     location: 'Commercial Fit-Out, Hyderabad',
   },
   {
     quote: '"From the first mood board to the final reveal, everything was transparent and exciting. Progressive Interiors delivered exactly what they promised — and more."',
-    name: 'Bimal Sharma',
-    location: 'Rainbow Vistas, Hyderabad',
+    name: 'Gauri Shankar',
+    location: 'Jyothi Serenity',
   },
 ]
 
