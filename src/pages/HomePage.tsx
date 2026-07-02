@@ -7,6 +7,7 @@ import PageLayout from '../components/PageLayout'
 import ParallaxImage from '../components/ParallaxImage'
 import MagneticButton from '../components/MagneticButton'
 import HorizontalScroll from '../components/HorizontalScroll'
+import YouTubePlayer from '../components/YoutubePlayer'
 import { useScrollReveal, useCountUp } from '../hooks/useGSAP'
 import {
   staggerContainer,
@@ -22,7 +23,6 @@ import serviceMaterialCuration from '../assets/images/service-material-curation.
 import brandStudioWorkspace from '../assets/images/brand-studio-workspace.png'
 import projectOakStoneVilla from '../assets/images/project-oak-stone-villa.webp'
 import projectMinimalistPenthouse from '../assets/images/project-minimalist-penthouse.webp'
-
 gsap.registerPlugin(ScrollTrigger)
 
 /* ════════════════════════════════════════════
@@ -226,7 +226,7 @@ const HomePage = () => {
 
       {/* ===== SECTION DIVIDER ===== */}
       <div className="section-divider" />
-
+      <YouTubePlayer videoId="WNyEBTzRoDQ" />
       {/* ===== OUR SERVICES — Asymmetric Grid ===== */}
       <section className="py-section lg:py-desktop-section px-6 lg:px-12">
         <div className="container mx-auto">
