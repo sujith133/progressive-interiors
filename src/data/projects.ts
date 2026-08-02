@@ -86,6 +86,12 @@ import kpmg3 from '../assets/images/commercial/kpmg/kpmg-3.webp'
 
 // Meridian Cargo
 import meridian1 from '../assets/images/commercial/meridian-cargo/meridian-1.jpg'
+import meridian2 from '../assets/images/commercial/meridian-cargo/meridian-2.jpg'
+import meridian3 from '../assets/images/commercial/meridian-cargo/meridian-3.jpg'
+import meridian4 from '../assets/images/commercial/meridian-cargo/meridian-4.jpg'
+import meridian5 from '../assets/images/commercial/meridian-cargo/meridian-5.jpg'
+import meridian6 from '../assets/images/commercial/meridian-cargo/meridian-6.jpg'
+import meridian7 from '../assets/images/commercial/meridian-cargo/meridian-7.jpg'
 
 // Oriental Motor
 import oriental1 from '../assets/images/commercial/oriental-motor/oriental-1.jpg'
@@ -249,7 +255,7 @@ export const projects: Project[] = [
     scope: 'Commercial Interior Design',
     location: 'Hyderabad, India',
     thumbnail: meridian1,
-    images: [meridian1],
+    images: [meridian1, meridian2, meridian3, meridian4, meridian5, meridian6, meridian7],
   },
   {
     slug: 'protiviti-india',

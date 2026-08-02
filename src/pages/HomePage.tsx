@@ -21,8 +21,8 @@ import serviceResidentialDesign from '../assets/images/service-residential-desig
 import serviceSpacePlanning from '../assets/images/service-space-planning.webp'
 import serviceMaterialCuration from '../assets/images/service-material-curation.webp'
 import brandStudioWorkspace from '../assets/images/brand-studio-workspace.png'
-import projectOakStoneVilla from '../assets/images/project-oak-stone-villa.webp'
-import projectMinimalistPenthouse from '../assets/images/project-minimalist-penthouse.webp'
+import kpmg2 from '../assets/images/commercial/kpmg/kpmg-2.webp'
+import blueStar1 from '../assets/images/commercial/blue-star/bluestar-1.webp'
 gsap.registerPlugin(ScrollTrigger)
 
 /* ════════════════════════════════════════════
@@ -385,37 +385,37 @@ const HomePage = () => {
 
           {/* Card 1 */}
           <div className="horizontal-card flex-shrink-0 px-4 flex items-center">
-            <Link to="/projects/ananda-villa" className="group block w-full">
+            <Link to="/projects/kpmg" className="group block w-full">
               <div className="overflow-hidden rounded-2xl aspect-[3/4] mb-6 relative">
                 <img
-                  alt="Ananda Villa"
+                  alt="KPMG"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  src={projectOakStoneVilla}
+                  src={kpmg2}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-deep-blue/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
                   <span className="text-ivory text-sm uppercase tracking-[0.2em]">View Project →</span>
                 </div>
               </div>
-              <span className="text-gold-dark text-[10px] uppercase tracking-[0.2em] mb-2 block">Residential · Bangalore</span>
-              <h3 className="font-serif text-2xl lg:text-3xl">Ananda Villa</h3>
+              <span className="text-gold-dark text-[10px] uppercase tracking-[0.2em] mb-2 block">Commercial · Hyderabad</span>
+              <h3 className="font-serif text-2xl lg:text-3xl">KPMG</h3>
             </Link>
           </div>
 
           {/* Card 2 */}
           <div className="horizontal-card flex-shrink-0 px-4 flex items-center">
-            <Link to="/projects/kala-loft" className="group block w-full">
+            <Link to="/projects/blue-star" className="group block w-full">
               <div className="overflow-hidden rounded-2xl aspect-[3/4] mb-6 relative">
                 <img
-                  alt="Kala Loft"
+                  alt="Blue Star Pvt. Ltd"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  src={projectMinimalistPenthouse}
+                  src={blueStar1}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-deep-blue/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
                   <span className="text-ivory text-sm uppercase tracking-[0.2em]">View Project →</span>
                 </div>
               </div>
-              <span className="text-gold-dark text-[10px] uppercase tracking-[0.2em] mb-2 block">Residential · Mumbai</span>
-              <h3 className="font-serif text-2xl lg:text-3xl">Kala Loft</h3>
+              <span className="text-gold-dark text-[10px] uppercase tracking-[0.2em] mb-2 block">Commercial · Hyderabad</span>
+              <h3 className="font-serif text-2xl lg:text-3xl">Blue Star Pvt. Ltd</h3>
             </Link>
           </div>
 
