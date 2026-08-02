@@ -111,6 +111,15 @@
     background: linear-gradient(90deg, transparent, #264053 20%, #F8D984 50%, #264053 80%, transparent);
     opacity: 0.2;
   }
+
+  /* Hide scrollbar for carousel thumbnail strip */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer components {
